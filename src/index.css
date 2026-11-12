@@ -1,10 +1,10 @@
 :root {
-  font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Montserrat', system-ui, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light;
-  color: #111111;
+  color: #1A1712;
   background-color: #FAFAF7;
 
   font-synthesis: none;
@@ -16,11 +16,11 @@
 
 a {
   font-weight: 500;
-  color: #111111;
+  color: #A07828;
   text-decoration: inherit;
 }
 a:hover {
-  color: #4A4A46;
+  color: #7A5C1A;
 }
 
 body {
@@ -47,7 +47,7 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #111111;
+  border-color: #A07828;
 }
 button:focus,
 button:focus-visible {

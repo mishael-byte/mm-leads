@@ -258,12 +258,12 @@ const CATEGORIES = [
 const STAGES = ["New","Contacted","In Progress","Proposal","Closed","Lost"];
 
 const STAGE_COLORS = {
-  New: { bg: "rgba(17,17,17,0.15)", color: "#4A4A46" },
-  Contacted: { bg: "rgba(17,17,17,0.15)", color: "#111111" },
-  "In Progress": { bg: "rgba(17,17,17,0.15)", color: "#111111" },
-  Proposal: { bg: "rgba(17,17,17,0.15)", color: "#111111" },
-  Closed: { bg: "rgba(17,17,17,0.15)", color: "#111111" },
-  Lost: { bg: "rgba(17,17,17,0.25)", color: "#6B6B66" },
+  New: { bg: "rgba(122,92,26,0.15)", color: "#5A5248" },
+  Contacted: { bg: "rgba(122,92,26,0.15)", color: "#7A5C1A" },
+  "In Progress": { bg: "rgba(160,120,40,0.15)", color: "#A07828" },
+  Proposal: { bg: "rgba(160,120,40,0.15)", color: "#A07828" },
+  Closed: { bg: "rgba(160,120,40,0.15)", color: "#A07828" },
+  Lost: { bg: "rgba(90,84,76,0.25)", color: "#9A9186" },
 };
 
 const MANUAL_SOURCES = [
@@ -447,9 +447,9 @@ function initials(name = "") {
   return name.split(" ").map(w => w[0] || "").join("").slice(0, 2).toUpperCase() || "??";
 }
 function scoreColor(s) {
-  if (s >= 85) return "#111111";
-  if (s >= 65) return "#111111";
-  return "#4A4A46";
+  if (s >= 85) return "#A07828";
+  if (s >= 65) return "#7A5C1A";
+  return "#5A5248";
 }
 function downloadFile(name, content, type) {
   const a = document.createElement("a");
@@ -491,8 +491,8 @@ function Toast({ msg, visible }) {
   return (
     <div style={{
       position: "fixed", top: 20, right: 20, zIndex: 9999,
-      background: "#111111", color: "#FAFAF7",
-      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 600, fontSize: 13,
+      background: "#C9A84C", color: "#1A1712",
+      fontFamily: "'Montserrat', sans-serif", fontWeight: 600, fontSize: 13,
       padding: "10px 20px", borderRadius: 5,
       opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(-10px)",
       transition: "all 0.25s", pointerEvents: "none",
@@ -521,8 +521,8 @@ function PhoneChip({ phone, onCopied }) {
   };
   return (
     <span onClick={handle} title="Click to copy" style={{
-      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 12,
-      color: copied ? "#111111" : "#111111",
+      fontFamily: "'Montserrat', sans-serif", fontSize: 12,
+      color: copied ? "#A07828" : "#A07828",
       cursor: "pointer", display: "inline-flex", alignItems: "center", gap: 4,
       transition: "color 0.2s", userSelect: "none",
     }}>
@@ -549,7 +549,7 @@ function WhatsAppButton({ phone, onToast }) {
         display: "inline-flex", alignItems: "center", gap: 5,
         background: "rgba(37,211,102,0.1)", border: "1px solid rgba(37,211,102,0.28)",
         color: "#25D366", borderRadius: 5, padding: "5px 10px",
-        fontSize: 11, fontWeight: 700, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif",
+        fontSize: 11, fontWeight: 700, fontFamily: "'Montserrat', sans-serif",
         textDecoration: "none", transition: "background 0.15s", whiteSpace: "nowrap",
       }}
       onMouseEnter={e => e.currentTarget.style.background = "rgba(37,211,102,0.18)"}
@@ -569,10 +569,10 @@ function ScoreBar({ score }) {
   const c = scoreColor(score);
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <div style={{ flex: 1, height: 3, background: "rgba(17,17,17,0.06)", borderRadius: 2 }}>
+      <div style={{ flex: 1, height: 3, background: "rgba(160,120,40,0.06)", borderRadius: 2 }}>
         <div style={{ width: `${score}%`, height: "100%", background: c, borderRadius: 2 }} />
       </div>
-      <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, color: c, minWidth: 28 }}>{score}</span>
+      <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 10, color: c, minWidth: 28 }}>{score}</span>
     </div>
   );
 }
@@ -582,7 +582,7 @@ function StageBadge({ stage }) {
   const s = STAGE_COLORS[stage] || STAGE_COLORS["New"];
   return (
     <span style={{
-      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 9, fontWeight: 600,
+      fontFamily: "'Montserrat', sans-serif", fontSize: 9, fontWeight: 600,
       padding: "2px 8px", borderRadius: 32, background: s.bg, color: s.color,
       letterSpacing: "0.5px", whiteSpace: "nowrap",
     }}>{stage.toUpperCase()}</span>
@@ -613,9 +613,9 @@ function SiteInspectButton({ place, onResult, onToast }) {
   };
   return (
     <button onClick={run} disabled={status === "checking"} style={{
-      background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC",
-      color: "#4A4A46", padding: "6px 12px", borderRadius: 5, fontSize: 11, fontWeight: 500,
-      cursor: status === "checking" ? "default" : "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif",
+      background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.09)",
+      color: "#5A5248", padding: "6px 12px", borderRadius: 5, fontSize: 11, fontWeight: 500,
+      cursor: status === "checking" ? "default" : "pointer", fontFamily: "'Montserrat', sans-serif",
     }}>
       {status === "checking" ? "Scanning…" : "↻ Re-check site"}
     </button>
@@ -628,7 +628,7 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
   const googleUrl = `https://www.google.com/search?q=${encodeURIComponent([name, place.formattedAddress].filter(Boolean).join(" "))}`;
   const rating = place.rating;
   const reviewCount = place.userRatingCount || 0;
-  const ratingColor = rating >= 4.5 ? "#111111" : rating >= 4 ? "#111111" : rating >= 3 ? "#4A4A46" : "#6B6B66";
+  const ratingColor = rating >= 4.5 ? "#A07828" : rating >= 4 ? "#7A5C1A" : rating >= 3 ? "#5A5248" : "#9A9186";
   const inspection = place._inspection;
 
   // Pre-scan domain hint: show TLD and HTTP warning before scan runs
@@ -642,7 +642,7 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
   })();
 
   let badge = null;
-  let badgeColor = "#111111";
+  let badgeColor = "#A07828";
   if (mode === "all") {
     badge = place.websiteUri ? null : { label: "NO WEBSITE", note: null };
   } else if (mode === "no_site") {
@@ -650,29 +650,29 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
   } else if (mode === "outdated_site") {
     const signals = inspection?.outdatedSignals || [];
     if (inspection) {
-      if (signals.length >= 3) { badge = { label: "LIKELY OUTDATED", note: signals.slice(0, 3).join(" · ") }; badgeColor = "#111111"; }
-      else if (signals.length > 0) { badge = { label: "SOME RED FLAGS", note: signals.join(" · ") }; badgeColor = "#111111"; }
-      else if (inspection.reachable) { badge = { label: "LOOKS CURRENT", note: null }; badgeColor = "#111111"; }
-      else { badge = { label: "SITE UNREACHABLE", note: null }; badgeColor = "#6B6B66"; }
+      if (signals.length >= 3) { badge = { label: "LIKELY OUTDATED", note: signals.slice(0, 3).join(" · ") }; badgeColor = "#A07828"; }
+      else if (signals.length > 0) { badge = { label: "SOME RED FLAGS", note: signals.join(" · ") }; badgeColor = "#A07828"; }
+      else if (inspection.reachable) { badge = { label: "LOOKS CURRENT", note: null }; badgeColor = "#7A5C1A"; }
+      else { badge = { label: "SITE UNREACHABLE", note: null }; badgeColor = "#9A9186"; }
     } else {
       // Pre-scan: show useful domain info instead of generic "HAS WEBSITE"
       badge = {
         label: domainHint?.isHttp ? "⚠ HTTP ONLY" : domainHint?.tld ? domainHint.tld.toUpperCase() : "HAS WEBSITE",
         note: domainHint?.isHttp ? "No HTTPS — strong pitch signal" : null,
       };
-      badgeColor = domainHint?.isHttp ? "#111111" : "#6B6B66";
+      badgeColor = domainHint?.isHttp ? "#A07828" : "#9A9186";
     }
   } else if (mode === "no_ecommerce") {
     if (inspection) {
-      if (inspection.hasEcommerce) { badge = { label: "HAS ONLINE STORE", note: null }; badgeColor = "#111111"; }
-      else if (inspection.reachable) { badge = { label: "NO ONLINE STORE", note: null }; badgeColor = "#111111"; }
-      else { badge = { label: "SITE UNREACHABLE", note: null }; badgeColor = "#6B6B66"; }
+      if (inspection.hasEcommerce) { badge = { label: "HAS ONLINE STORE", note: null }; badgeColor = "#7A5C1A"; }
+      else if (inspection.reachable) { badge = { label: "NO ONLINE STORE", note: null }; badgeColor = "#A07828"; }
+      else { badge = { label: "SITE UNREACHABLE", note: null }; badgeColor = "#9A9186"; }
     } else {
       badge = {
         label: domainHint?.isHttp ? "⚠ HTTP ONLY" : domainHint?.tld ? domainHint.tld.toUpperCase() : "HAS WEBSITE",
         note: domainHint?.isHttp ? "No HTTPS — easier pitch" : null,
       };
-      badgeColor = domainHint?.isHttp ? "#111111" : "#6B6B66";
+      badgeColor = domainHint?.isHttp ? "#A07828" : "#9A9186";
     }
   }
 
@@ -685,32 +685,32 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
 
   return (
     <div style={{
-      background: "#F2F1EC", border: "1px solid rgba(17,17,17,0.18)", boxShadow: "0 1px 4px rgba(17,17,17,0.06)",
+      background: "#F4F1EB", border: "1px solid rgba(160,120,40,0.18)", boxShadow: "0 1px 4px rgba(26,23,18,0.06)",
       borderRadius: 16, overflow: "hidden", display: "flex", flexDirection: "column",
       animation: "fadeSlideIn 0.4s ease forwards", animationDelay: `${index * 0.05}s`, opacity: 0,
     }}>
       <div style={{ padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700, fontSize: 14, color: "#111111", lineHeight: 1.3 }}>{name}</div>
+          <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: 14, color: "#1A1712", lineHeight: 1.3 }}>{name}</div>
           <div style={{ marginTop: 5, display: "flex", gap: 6, flexWrap: "wrap", alignItems: "center" }}>
             {badge && (
-              <span style={{ background: `rgba(${badgeColor === "#111111" ? "201,168,76" : badgeColor === "#111111" ? "226,196,106" : badgeColor === "#111111" ? "138,110,42" : "90,84,76"},0.14)`, color: badgeColor, fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 32, border: `1px solid ${badgeColor}44`, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", letterSpacing: "0.05em" }}>{badge.label}</span>
+              <span style={{ background: `rgba(${badgeColor === "#A07828" ? "201,168,76" : badgeColor === "#A07828" ? "226,196,106" : badgeColor === "#7A5C1A" ? "138,110,42" : "90,84,76"},0.14)`, color: badgeColor, fontSize: 9, fontWeight: 700, padding: "2px 8px", borderRadius: 32, border: `1px solid ${badgeColor}44`, fontFamily: "'Montserrat', sans-serif", letterSpacing: "0.05em" }}>{badge.label}</span>
             )}
             {place.websiteUri && mode !== "no_site" && (
-              <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontSize: 10, color: "#111111", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", textDecoration: "none" }}>
+              <a href={place.websiteUri} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{ fontSize: 10, color: "#7A5C1A", fontFamily: "'Montserrat', sans-serif", textDecoration: "none" }}>
                 {place.websiteUri.replace(/^https?:\/\//, "").replace(/\/$/, "")}
               </a>
             )}
           </div>
           {badge?.note && (
-            <div style={{ fontSize: 10, color: "#111111", marginTop: 4, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>⚠ {badge.note}</div>
+            <div style={{ fontSize: 10, color: "#A07828", marginTop: 4, fontFamily: "'Montserrat', sans-serif" }}>⚠ {badge.note}</div>
           )}
           {/* Pitch hints */}
           {pitchHints.length > 0 && (
             <div style={{ marginTop: 6, display: "flex", gap: 5, flexWrap: "wrap" }}>
               {pitchHints.map(hint => (
-                <span key={hint} style={{ fontSize: 9, color: "#6B6B66", background: "rgba(17,17,17,0.04)", border: "1px solid #E4E2DC", padding: "2px 7px", borderRadius: 32, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                <span key={hint} style={{ fontSize: 9, color: "#9A9186", background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.07)", padding: "2px 7px", borderRadius: 32, fontFamily: "'Montserrat', sans-serif" }}>
                   {hint}
                 </span>
               ))}
@@ -718,51 +718,51 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
           )}
           {/* Non-retail warning */}
           {notRetail && !inspection && (
-            <div style={{ fontSize: 9, color: "#6B6B66", marginTop: 5, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+            <div style={{ fontSize: 9, color: "#9A9186", marginTop: 5, fontFamily: "'Montserrat', sans-serif" }}>
               ⓘ Category may not typically sell online
             </div>
           )}
         </div>
         <div style={{ display: "flex", gap: 6, flexShrink: 0, flexWrap: "wrap", justifyContent: "flex-end" }}>
-          <button onClick={() => window.open(googleUrl, "_blank")} title="Search on Google" style={{ background: "rgba(17,17,17,0.06)", border: "1px solid #E4E2DC", color: "#4A4A46", padding: "6px 9px", borderRadius: 5, fontSize: 13, cursor: "pointer" }}>🔍</button>
+          <button onClick={() => window.open(googleUrl, "_blank")} title="Search on Google" style={{ background: "rgba(160,120,40,0.06)", border: "1px solid rgba(160,120,40,0.1)", color: "#5A5248", padding: "6px 9px", borderRadius: 5, fontSize: 13, cursor: "pointer" }}>🔍</button>
           {mode !== "no_site" && place.websiteUri && (
             <SiteInspectButton place={place} onResult={onInspectResult} onToast={onToast} />
           )}
           <button onClick={() => onSave(place)} disabled={isSaved} style={{
-            background: isSaved ? "transparent" : "#111111", color: isSaved ? "#111111" : "#FAFAF7",
-            border: isSaved ? "1px solid #111111" : "1px solid #111111",
+            background: isSaved ? "transparent" : "#C9A84C", color: isSaved ? "#7A5C1A" : "#1A1712",
+            border: isSaved ? "1px solid #7A5C1A" : "1px solid #C9A84C",
             padding: "6px 14px", borderRadius: 5, fontSize: 11, fontWeight: 700,
-            cursor: isSaved ? "default" : "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", transition: "all 0.2s",
+            cursor: isSaved ? "default" : "pointer", fontFamily: "'Montserrat', sans-serif", transition: "all 0.2s",
           }}>{isSaved ? "✓ Saved" : "+ CRM"}</button>
         </div>
       </div>
 
       {/* Rating block — big and prominent */}
       {rating ? (
-        <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(17,17,17,0.03)", borderRadius: 5, padding: "10px 14px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, background: "rgba(160,120,40,0.03)", borderRadius: 5, padding: "10px 14px" }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", minWidth: 48 }}>
-            <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 500, fontSize: 28, color: ratingColor, lineHeight: 1 }}>{rating.toFixed(1)}</span>
-            <span style={{ fontSize: 9, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 2 }}>RATING</span>
+            <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: 28, color: ratingColor, lineHeight: 1 }}>{rating.toFixed(1)}</span>
+            <span style={{ fontSize: 9, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginTop: 2 }}>RATING</span>
           </div>
-          <div style={{ width: 1, height: 36, background: "rgba(17,17,17,0.07)" }} />
+          <div style={{ width: 1, height: 36, background: "rgba(160,120,40,0.07)" }} />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 500, fontSize: 22, color: "#111111", lineHeight: 1 }}>{reviewCount.toLocaleString()}</span>
-            <span style={{ fontSize: 9, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 2 }}>REVIEWS</span>
+            <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: 22, color: "#1A1712", lineHeight: 1 }}>{reviewCount.toLocaleString()}</span>
+            <span style={{ fontSize: 9, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginTop: 2 }}>REVIEWS</span>
           </div>
           <div style={{ flex: 1 }}>
-            <div style={{ height: 4, background: "rgba(17,17,17,0.06)", borderRadius: 2, overflow: "hidden" }}>
+            <div style={{ height: 4, background: "rgba(160,120,40,0.06)", borderRadius: 2, overflow: "hidden" }}>
               <div style={{ width: `${(rating / 5) * 100}%`, height: "100%", background: ratingColor, borderRadius: 2 }} />
             </div>
-            <div style={{ fontSize: 10, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 4 }}>
+            <div style={{ fontSize: 10, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginTop: 4 }}>
               {"★".repeat(Math.round(rating))}{"☆".repeat(5 - Math.round(rating))}
             </div>
           </div>
         </div>
       ) : (
-        <div style={{ fontSize: 11, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>No reviews yet</div>
+        <div style={{ fontSize: 11, color: "#9A9186", fontFamily: "'Montserrat', sans-serif" }}>No reviews yet</div>
       )}
 
-      {place.formattedAddress && <div style={{ fontSize: 12, color: "rgba(17,17,17,0.35)" }}>📍 {place.formattedAddress}</div>}
+      {place.formattedAddress && <div style={{ fontSize: 12, color: "rgba(26,23,18,0.35)" }}>📍 {place.formattedAddress}</div>}
       {phone && (
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <PhoneChip phone={phone} onCopied={onToast} />
@@ -778,16 +778,16 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
 function AddManualModal({ onClose, onAdd }) {
   const [form, setForm] = useState({ name: "", role: "", company: "", phone: "", email: "", location: "", source: "cold", notes: "" });
   const set = k => e => setForm(f => ({ ...f, [k]: e.target.value }));
-  const inputStyle = { width: "100%", background: "rgba(17,17,17,0.06)", border: "1px solid #E4E2DC", borderRadius: 5, color: "#111111", padding: "10px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13, outline: "none" };
-  const labelStyle = { fontSize: 10, fontWeight: 700, color: "rgba(17,17,17,0.3)", display: "block", marginBottom: 6, letterSpacing: "0.1em", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" };
+  const inputStyle = { width: "100%", background: "rgba(160,120,40,0.06)", border: "1px solid rgba(160,120,40,0.1)", borderRadius: 5, color: "#1A1712", padding: "10px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 13, outline: "none" };
+  const labelStyle = { fontSize: 10, fontWeight: 700, color: "rgba(26,23,18,0.3)", display: "block", marginBottom: 6, letterSpacing: "0.1em", fontFamily: "'Montserrat', sans-serif" };
   const canSubmit = form.name.trim() && form.company.trim();
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: "#F2F1EC", border: "1px solid rgba(17,17,17,0.2)", borderRadius: 16, width: "100%", maxWidth: 480, maxHeight: "92vh", overflow: "auto" }}>
-        <div style={{ padding: "20px 24px", borderBottom: "1px solid rgba(17,17,17,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700, color: "#111111", fontSize: 14 }}>Add Lead Manually</span>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "#4A4A46", fontSize: 18, cursor: "pointer" }}>✕</button>
+      <div onClick={e => e.stopPropagation()} style={{ background: "#F4F1EB", border: "1px solid rgba(160,120,40,0.2)", borderRadius: 16, width: "100%", maxWidth: 480, maxHeight: "92vh", overflow: "auto" }}>
+        <div style={{ padding: "20px 24px", borderBottom: "1px solid rgba(160,120,40,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, color: "#A07828", fontSize: 14 }}>Add Lead Manually</span>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "#5A5248", fontSize: 18, cursor: "pointer" }}>✕</button>
         </div>
         <div style={{ padding: "20px 24px", display: "grid", gap: 14 }}>
           {[
@@ -809,10 +809,10 @@ function AddManualModal({ onClose, onAdd }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
               {MANUAL_SOURCES.map(s => (
                 <button key={s.id} onClick={() => setForm(f => ({ ...f, source: s.id }))} title={s.hint} style={{
-                  background: form.source === s.id ? "rgba(17,17,17,0.12)" : "rgba(17,17,17,0.04)",
-                  border: `1px solid ${form.source === s.id ? "rgba(17,17,17,0.4)" : "rgba(17,17,17,0.08)"}`,
-                  borderRadius: 5, padding: "9px 12px", color: form.source === s.id ? "#111111" : "#4A4A46",
-                  fontSize: 12, cursor: "pointer", textAlign: "left", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", transition: "all 0.15s",
+                  background: form.source === s.id ? "rgba(160,120,40,0.12)" : "rgba(160,120,40,0.04)",
+                  border: `1px solid ${form.source === s.id ? "rgba(160,120,40,0.4)" : "rgba(160,120,40,0.08)"}`,
+                  borderRadius: 5, padding: "9px 12px", color: form.source === s.id ? "#A07828" : "#5A5248",
+                  fontSize: 12, cursor: "pointer", textAlign: "left", fontFamily: "'Montserrat', sans-serif", transition: "all 0.15s",
                 }}>{s.icon} {s.label}</button>
               ))}
             </div>
@@ -823,9 +823,9 @@ function AddManualModal({ onClose, onAdd }) {
             <textarea value={form.notes} onChange={set("notes")} placeholder="First impressions, pitch angle, how to approach…" rows={3} style={{ ...inputStyle, resize: "vertical" }} />
           </div>
         </div>
-        <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(17,17,17,0.06)", display: "flex", gap: 10, justifyContent: "flex-end" }}>
-          <button onClick={onClose} style={{ background: "transparent", border: "1px solid #E4E2DC", color: "#4A4A46", padding: "9px 18px", borderRadius: 5, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13 }}>Cancel</button>
-          <button onClick={() => { if (!canSubmit) return; onAdd(form); onClose(); }} style={{ background: canSubmit ? "#111111" : "rgba(17,17,17,0.08)", color: canSubmit ? "#FAFAF7" : "#4A4A46", border: "none", padding: "9px 22px", borderRadius: 5, fontWeight: 700, cursor: canSubmit ? "pointer" : "default", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13, transition: "all 0.2s" }}>Add Lead</button>
+        <div style={{ padding: "16px 24px", borderTop: "1px solid rgba(160,120,40,0.06)", display: "flex", gap: 10, justifyContent: "flex-end" }}>
+          <button onClick={onClose} style={{ background: "transparent", border: "1px solid rgba(160,120,40,0.1)", color: "#5A5248", padding: "9px 18px", borderRadius: 5, cursor: "pointer", fontFamily: "'Montserrat', sans-serif", fontSize: 13 }}>Cancel</button>
+          <button onClick={() => { if (!canSubmit) return; onAdd(form); onClose(); }} style={{ background: canSubmit ? "#C9A84C" : "rgba(160,120,40,0.08)", color: canSubmit ? "#1A1712" : "#5A5248", border: "none", padding: "9px 22px", borderRadius: 5, fontWeight: 700, cursor: canSubmit ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif", fontSize: 13, transition: "all 0.2s" }}>Add Lead</button>
         </div>
       </div>
     </div>
@@ -844,36 +844,36 @@ function CRMDetail({ lead, onUpdate, onDelete, onClose, onToast }) {
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 900, display: "flex", justifyContent: "flex-end" }}>
-      <div onClick={e => e.stopPropagation()} style={{ width: "100%", maxWidth: 390, height: "100%", background: "#F2F1EC", borderLeft: "1px solid rgba(17,17,17,0.18)", overflow: "auto", display: "flex", flexDirection: "column" }}>
+      <div onClick={e => e.stopPropagation()} style={{ width: "100%", maxWidth: 390, height: "100%", background: "#F4F1EB", borderLeft: "1px solid rgba(160,120,40,0.18)", overflow: "auto", display: "flex", flexDirection: "column" }}>
 
         <div style={{ padding: "18px 20px 0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 12, fontWeight: 700, color: "#111111", letterSpacing: "0.1em" }}>LEAD DETAIL</span>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "#4A4A46", fontSize: 18, cursor: "pointer" }}>✕</button>
+          <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 12, fontWeight: 700, color: "#A07828", letterSpacing: "0.1em" }}>LEAD DETAIL</span>
+          <button onClick={onClose} style={{ background: "none", border: "none", color: "#5A5248", fontSize: 18, cursor: "pointer" }}>✕</button>
         </div>
 
         <div style={{ padding: 20, flex: 1, display: "flex", flexDirection: "column", gap: 18 }}>
 
           {/* Identity */}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{ width: 54, height: 54, borderRadius: "50%", background: "rgba(17,17,17,0.12)", border: "2px solid rgba(17,17,17,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 500, fontSize: 17, color: "#111111", flexShrink: 0 }}>
+            <div style={{ width: 54, height: 54, borderRadius: "50%", background: "rgba(160,120,40,0.12)", border: "2px solid rgba(160,120,40,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: 17, color: "#A07828", flexShrink: 0 }}>
               {initials(name)}
             </div>
             <div>
-              <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700, fontSize: 16, color: "#111111" }}>{name}</div>
-              {lead.role && <div style={{ fontSize: 12, color: "#4A4A46", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 2 }}>{lead.role}{company && company !== name ? ` @ ${company}` : ""}</div>}
-              <div style={{ fontSize: 10, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 3 }}>via {sourceLabel}</div>
+              <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: 16, color: "#1A1712" }}>{name}</div>
+              {lead.role && <div style={{ fontSize: 12, color: "#5A5248", fontFamily: "'Montserrat', sans-serif", marginTop: 2 }}>{lead.role}{company && company !== name ? ` @ ${company}` : ""}</div>}
+              <div style={{ fontSize: 10, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginTop: 3 }}>via {sourceLabel}</div>
             </div>
           </div>
 
           {/* Score */}
           <div>
-            <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 7, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>LEAD SCORE</div>
+            <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 7, fontFamily: "'Montserrat', sans-serif" }}>LEAD SCORE</div>
             <ScoreBar score={lead.score || 60} />
           </div>
 
           {/* Contact info */}
           <div>
-            <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 8, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>CONTACT</div>
+            <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 8, fontFamily: "'Montserrat', sans-serif" }}>CONTACT</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
               {phone && (
                 <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -881,43 +881,43 @@ function CRMDetail({ lead, onUpdate, onDelete, onClose, onToast }) {
                   <WhatsAppButton phone={phone} />
                 </div>
               )}
-              {lead.email && <a href={`mailto:${lead.email}`} style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 12, color: "#111111", textDecoration: "none" }}>✉ {lead.email}</a>}
-              {(lead.formattedAddress || lead.location) && <span style={{ fontSize: 12, color: "#4A4A46" }}>📍 {lead.formattedAddress || lead.location}</span>}
-              {lead.rating && <span style={{ fontSize: 12, color: "#4A4A46" }}>⭐ {lead.rating} ({lead.userRatingCount || 0} reviews)</span>}
+              {lead.email && <a href={`mailto:${lead.email}`} style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 12, color: "#7A5C1A", textDecoration: "none" }}>✉ {lead.email}</a>}
+              {(lead.formattedAddress || lead.location) && <span style={{ fontSize: 12, color: "#5A5248" }}>📍 {lead.formattedAddress || lead.location}</span>}
+              {lead.rating && <span style={{ fontSize: 12, color: "#5A5248" }}>⭐ {lead.rating} ({lead.userRatingCount || 0} reviews)</span>}
             </div>
           </div>
 
           {/* Google Preview */}
           <div>
-            <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 8, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>ONLINE PROFILE</div>
-            <div style={{ background: "rgba(17,17,17,0.03)", border: "1px solid rgba(17,17,17,0.06)", borderRadius: 5, padding: "10px 12px", marginBottom: 8 }}>
-              <div style={{ fontSize: 12, color: "#111111", fontWeight: 600, marginBottom: 2 }}>{name}{company && company !== name ? ` — ${company}` : ""}</div>
-              <div style={{ fontSize: 10, color: "#111111", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginBottom: 5 }}>google.com/search</div>
-              <div style={{ fontSize: 11, color: "#4A4A46", lineHeight: 1.5 }}>Search their digital footprint — reviews, social pages, directories.</div>
+            <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 8, fontFamily: "'Montserrat', sans-serif" }}>ONLINE PROFILE</div>
+            <div style={{ background: "rgba(160,120,40,0.03)", border: "1px solid rgba(160,120,40,0.06)", borderRadius: 5, padding: "10px 12px", marginBottom: 8 }}>
+              <div style={{ fontSize: 12, color: "#A07828", fontWeight: 600, marginBottom: 2 }}>{name}{company && company !== name ? ` — ${company}` : ""}</div>
+              <div style={{ fontSize: 10, color: "#A07828", fontFamily: "'Montserrat', sans-serif", marginBottom: 5 }}>google.com/search</div>
+              <div style={{ fontSize: 11, color: "#5A5248", lineHeight: 1.5 }}>Search their digital footprint — reviews, social pages, directories.</div>
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => window.open(googleUrl, "_blank")} style={{ flex: 1, background: "rgba(17,17,17,0.05)", border: "1px solid rgba(17,17,17,0.08)", color: "#4A4A46", padding: "8px 0", borderRadius: 5, fontSize: 12, cursor: "pointer" }}>🔍 Google</button>
-              <button onClick={() => window.open(linkedinUrl, "_blank")} style={{ flex: 1, background: "rgba(17,17,17,0.07)", border: "1px solid rgba(17,17,17,0.18)", color: "#111111", padding: "8px 0", borderRadius: 5, fontSize: 12, cursor: "pointer" }}>in LinkedIn</button>
+              <button onClick={() => window.open(googleUrl, "_blank")} style={{ flex: 1, background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.08)", color: "#5A5248", padding: "8px 0", borderRadius: 5, fontSize: 12, cursor: "pointer" }}>🔍 Google</button>
+              <button onClick={() => window.open(linkedinUrl, "_blank")} style={{ flex: 1, background: "rgba(122,92,26,0.07)", border: "1px solid rgba(122,92,26,0.18)", color: "#7A5C1A", padding: "8px 0", borderRadius: 5, fontSize: 12, cursor: "pointer" }}>in LinkedIn</button>
             </div>
           </div>
 
           {/* Stage */}
           <div>
-            <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 6, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>PIPELINE STAGE</div>
-            <select value={lead.status} onChange={e => onUpdate(lead.id, { status: e.target.value })} style={{ width: "100%", background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: "#111111", padding: "10px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 12, outline: "none" }}>
+            <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 6, fontFamily: "'Montserrat', sans-serif" }}>PIPELINE STAGE</div>
+            <select value={lead.status} onChange={e => onUpdate(lead.id, { status: e.target.value })} style={{ width: "100%", background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.1)", borderRadius: 5, color: "#1A1712", padding: "10px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 12, outline: "none" }}>
               {STAGES.map(s => <option key={s}>{s}</option>)}
             </select>
           </div>
 
           {/* Notes */}
           <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 6, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>NOTES</div>
-            <textarea value={notes} onChange={e => setNotes(e.target.value)} onBlur={() => onUpdate(lead.id, { notes })} placeholder="Pitch angle, follow-up plan, what they need…" rows={4} style={{ width: "100%", background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: "#111111", padding: "10px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 12, resize: "vertical", outline: "none" }} />
+            <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 6, fontFamily: "'Montserrat', sans-serif" }}>NOTES</div>
+            <textarea value={notes} onChange={e => setNotes(e.target.value)} onBlur={() => onUpdate(lead.id, { notes })} placeholder="Pitch angle, follow-up plan, what they need…" rows={4} style={{ width: "100%", background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.1)", borderRadius: 5, color: "#1A1712", padding: "10px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 12, resize: "vertical", outline: "none" }} />
           </div>
 
           {/* Actions */}
           <div style={{ display: "flex", gap: 8 }}>
-            <button onClick={() => { onDelete(lead.id); onClose(); }} style={{ flex: 1, background: "rgba(155,44,44,0.07)", border: "1px solid rgba(155,44,44,0.18)", color: "#9B2C2C", padding: "9px 0", borderRadius: 5, fontSize: 12, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>Remove</button>
+            <button onClick={() => { onDelete(lead.id); onClose(); }} style={{ flex: 1, background: "rgba(224,82,82,0.07)", border: "1px solid rgba(224,82,82,0.18)", color: "#E05252", padding: "9px 0", borderRadius: 5, fontSize: 12, cursor: "pointer", fontFamily: "'Montserrat', sans-serif" }}>Remove</button>
             <button onClick={() => {
               const info = [
                 `Name: ${name}`, lead.role ? `Role: ${lead.role}` : "",
@@ -927,7 +927,7 @@ function CRMDetail({ lead, onUpdate, onDelete, onClose, onToast }) {
               ].filter(Boolean).join("\n");
               navigator.clipboard.writeText(info);
               onToast("Lead info copied ✓");
-            }} style={{ flex: 1, background: "rgba(17,17,17,0.08)", border: "1px solid rgba(17,17,17,0.22)", color: "#111111", padding: "9px 0", borderRadius: 5, fontSize: 12, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>⎘ Copy Info</button>
+            }} style={{ flex: 1, background: "rgba(160,120,40,0.08)", border: "1px solid rgba(160,120,40,0.22)", color: "#A07828", padding: "9px 0", borderRadius: 5, fontSize: 12, cursor: "pointer", fontFamily: "'Montserrat', sans-serif" }}>⎘ Copy Info</button>
           </div>
         </div>
       </div>
@@ -943,43 +943,43 @@ function CRMCard({ lead, onUpdate, onDelete, onClick, onToast }) {
   const srcIcon = lead.source === "google" ? "📍" : (src?.icon || "✦");
   const rating = lead.rating;
   const reviewCount = lead.userRatingCount || 0;
-  const ratingColor = rating >= 4.5 ? "#111111" : rating >= 4 ? "#111111" : rating >= 3 ? "#4A4A46" : "#6B6B66";
+  const ratingColor = rating >= 4.5 ? "#A07828" : rating >= 4 ? "#7A5C1A" : rating >= 3 ? "#5A5248" : "#9A9186";
 
   return (
-    <div onClick={onClick} style={{ background: "#F2F1EC", borderRadius: 8, padding: "13px 15px", border: `1px solid rgba(17,17,17,0.18)`, borderLeft: `3px solid ${STAGE_COLORS[lead.status]?.color || "#111111"}`, cursor: "pointer", transition: "background 0.15s", display: "flex", flexDirection: "column", gap: 7 }}
+    <div onClick={onClick} style={{ background: "#F4F1EB", borderRadius: 8, padding: "13px 15px", border: `1px solid rgba(160,120,40,0.18)`, borderLeft: `3px solid ${STAGE_COLORS[lead.status]?.color || "#A07828"}`, cursor: "pointer", transition: "background 0.15s", display: "flex", flexDirection: "column", gap: 7 }}
       onMouseEnter={e => e.currentTarget.style.background = "#EDE9E0"}
-      onMouseLeave={e => e.currentTarget.style.background = "#F2F1EC"}>
+      onMouseLeave={e => e.currentTarget.style.background = "#F4F1EB"}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "#111111", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#1A1712", fontFamily: "'Montserrat', sans-serif", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{name}</div>
         <StageBadge stage={lead.status} />
       </div>
-      {lead.role && <div style={{ fontSize: 11, color: "#4A4A46", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>{lead.role}</div>}
+      {lead.role && <div style={{ fontSize: 11, color: "#5A5248", fontFamily: "'Montserrat', sans-serif" }}>{lead.role}</div>}
 
       {/* Category + city pills */}
       {(lead.savedCategory || lead.savedCity || lead.country) && (
         <div style={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
           {lead.savedCategory && (
-            <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 9, color: "#4A4A46", background: "rgba(17,17,17,0.12)", border: "1px solid rgba(17,17,17,0.2)", padding: "2px 7px", borderRadius: 32 }}>{lead.savedCategory}</span>
+            <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 9, color: "#5A5248", background: "rgba(122,92,26,0.12)", border: "1px solid rgba(122,92,26,0.2)", padding: "2px 7px", borderRadius: 32 }}>{lead.savedCategory}</span>
           )}
           {lead.savedCity && (
-            <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 9, color: "#111111", background: "rgba(17,17,17,0.08)", border: "1px solid rgba(17,17,17,0.18)", padding: "2px 7px", borderRadius: 32 }}>📍 {lead.savedCity}</span>
+            <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 9, color: "#7A5C1A", background: "rgba(122,92,26,0.08)", border: "1px solid rgba(122,92,26,0.18)", padding: "2px 7px", borderRadius: 32 }}>📍 {lead.savedCity}</span>
           )}
           {lead.country && !lead.savedCity && (
-            <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 9, color: "#111111", background: "rgba(17,17,17,0.08)", border: "1px solid rgba(17,17,17,0.18)", padding: "2px 7px", borderRadius: 32 }}>🌍 {lead.country}</span>
+            <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 9, color: "#7A5C1A", background: "rgba(122,92,26,0.08)", border: "1px solid rgba(122,92,26,0.18)", padding: "2px 7px", borderRadius: 32 }}>🌍 {lead.country}</span>
           )}
         </div>
       )}
 
       {/* Rating + reviews */}
       {rating ? (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(17,17,17,0.025)", borderRadius: 5, padding: "6px 10px" }}>
-          <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 500, fontSize: 16, color: ratingColor, lineHeight: 1 }}>⭐ {rating.toFixed(1)}</span>
-          <span style={{ width: 1, height: 16, background: "rgba(17,17,17,0.07)", display: "inline-block" }} />
-          <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, color: "#4A4A46" }}>{reviewCount.toLocaleString()} reviews</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(160,120,40,0.025)", borderRadius: 5, padding: "6px 10px" }}>
+          <span style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 500, fontSize: 16, color: ratingColor, lineHeight: 1 }}>⭐ {rating.toFixed(1)}</span>
+          <span style={{ width: 1, height: 16, background: "rgba(160,120,40,0.07)", display: "inline-block" }} />
+          <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 10, color: "#5A5248" }}>{reviewCount.toLocaleString()} reviews</span>
         </div>
       ) : null}
 
-      {(lead.formattedAddress || lead.location) && <div style={{ fontSize: 11, color: "rgba(17,17,17,0.3)" }}>📍 {(lead.formattedAddress || lead.location || "").split(",").slice(0, 2).join(",")}</div>}
+      {(lead.formattedAddress || lead.location) && <div style={{ fontSize: 11, color: "rgba(26,23,18,0.3)" }}>📍 {(lead.formattedAddress || lead.location || "").split(",").slice(0, 2).join(",")}</div>}
       {phone && (
         <div onClick={e => e.stopPropagation()} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
           <PhoneChip phone={phone} onCopied={onToast} />
@@ -987,11 +987,11 @@ function CRMCard({ lead, onUpdate, onDelete, onClick, onToast }) {
         </div>
       )}
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
-        <select value={lead.status} onChange={e => { e.stopPropagation(); onUpdate(lead.id, { status: e.target.value }); }} onClick={e => e.stopPropagation()} style={{ flex: 1, background: "rgba(17,17,17,0.05)", color: "#888", border: "1px solid rgba(17,17,17,0.08)", fontSize: 10, padding: "5px 8px", borderRadius: 5, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", outline: "none" }}>
+        <select value={lead.status} onChange={e => { e.stopPropagation(); onUpdate(lead.id, { status: e.target.value }); }} onClick={e => e.stopPropagation()} style={{ flex: 1, background: "rgba(160,120,40,0.05)", color: "#888", border: "1px solid rgba(160,120,40,0.08)", fontSize: 10, padding: "5px 8px", borderRadius: 5, fontFamily: "'Montserrat', sans-serif", outline: "none" }}>
           {STAGES.map(s => <option key={s}>{s}</option>)}
         </select>
-        <span style={{ fontSize: 9, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", background: "rgba(17,17,17,0.04)", padding: "3px 7px", borderRadius: 4, flexShrink: 0 }}>{srcIcon}</span>
-        <button onClick={e => { e.stopPropagation(); onDelete(lead.id); }} style={{ background: "rgba(155,44,44,0.08)", border: "none", color: "#9B2C2C", fontSize: 10, padding: "5px 9px", borderRadius: 5, cursor: "pointer" }}>✕</button>
+        <span style={{ fontSize: 9, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", background: "rgba(160,120,40,0.04)", padding: "3px 7px", borderRadius: 4, flexShrink: 0 }}>{srcIcon}</span>
+        <button onClick={e => { e.stopPropagation(); onDelete(lead.id); }} style={{ background: "rgba(224,82,82,0.08)", border: "none", color: "#E05252", fontSize: 10, padding: "5px 9px", borderRadius: 5, cursor: "pointer" }}>✕</button>
       </div>
       <ScoreBar score={lead.score || 60} />
     </div>
@@ -1400,28 +1400,28 @@ useEffect(() => {
   const canSearch = !!(customCategory.trim() || effectiveCategory);
 
   const tabStyle = active => ({
-    fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13, fontWeight: 700,
+    fontFamily: "'Montserrat', sans-serif", fontSize: 13, fontWeight: 700,
     padding: "10px 22px", borderRadius: 5, border: "none", cursor: "pointer",
-    background: active ? "#111111" : "rgba(17,17,17,0.05)",
-    color: active ? "#FAFAF7" : "#4A4A46", transition: "all 0.2s",
+    background: active ? "#C9A84C" : "rgba(160,120,40,0.05)",
+    color: active ? "#1A1712" : "#5A5248", transition: "all 0.2s",
   });
-  const inputStyle = { width: "100%", background: "rgba(17,17,17,0.06)", border: "1px solid #E4E2DC", borderRadius: 5, color: "#111111", padding: "12px 14px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13, outline: "none" };
-  const labelStyle = { fontSize: 10, fontWeight: 700, color: "rgba(17,17,17,0.3)", display: "block", marginBottom: 7, letterSpacing: "0.1em", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" };
+  const inputStyle = { width: "100%", background: "rgba(160,120,40,0.06)", border: "1px solid rgba(160,120,40,0.1)", borderRadius: 5, color: "#1A1712", padding: "12px 14px", fontFamily: "'Montserrat', sans-serif", fontSize: 13, outline: "none" };
+  const labelStyle = { fontSize: 10, fontWeight: 700, color: "rgba(26,23,18,0.3)", display: "block", marginBottom: 7, letterSpacing: "0.1em", fontFamily: "'Montserrat', sans-serif" };
 
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap');
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { background: #FAFAF7; min-height: 100%; font-family: 'Jost', 'Helvetica Neue', Arial, sans-serif; color: #111111; }
+        html, body { background: #FAFAF7; min-height: 100%; font-family: 'Montserrat', sans-serif; color: #1A1712; }
         #root { min-height: 100%; }
         ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: rgba(17,17,17,0.15); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(160,120,40,0.15); border-radius: 10px; }
         @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-        select option { background: #FAFAF7; color: #111111; }
-        input::placeholder, textarea::placeholder { color: rgba(17,17,17,0.2); }
+        select option { background: #FAFAF7; color: #1A1712; }
+        input::placeholder, textarea::placeholder { color: rgba(26,23,18,0.2); }
         input, select, textarea, button { font-family: inherit; }
       `}</style>
 
@@ -1429,27 +1429,27 @@ useEffect(() => {
       {showAddModal && <AddManualModal onClose={() => setShowAddModal(false)} onAdd={addManual} />}
       {detailLead && <CRMDetail lead={detailLead} onUpdate={updateLead} onDelete={deleteLead} onClose={() => setDetailLead(null)} onToast={toast.show} />}
 
-      <div style={{ minHeight: "100vh", background: "#FAFAF7", color: "#111111", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+      <div style={{ minHeight: "100vh", background: "#FAFAF7", backgroundImage: "radial-gradient(ellipse 80% 40% at 50% -5%, rgba(160,120,40,0.1) 0%, transparent 60%)", color: "#1A1712", fontFamily: "'Montserrat', sans-serif" }}>
         <div style={{ padding: "0 0 80px" }}>
         <div style={{ maxWidth: 1500, margin: "0 auto", padding: "0 24px" }}>
 
           {/* HEADER */}
-          <header style={{ padding: "30px 0 24px", animation: "fadeSlideIn 0.5s ease forwards", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap", borderBottom: "1px solid #E4E2DC", marginBottom: 28 }}>
+          <header style={{ padding: "30px 0 24px", animation: "fadeSlideIn 0.5s ease forwards", display: "flex", alignItems: "flex-end", justifyContent: "space-between", gap: 16, flexWrap: "wrap", borderBottom: "1px solid rgba(160,120,40,0.05)", marginBottom: 28 }}>
             <div>
-              <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "#111111", marginBottom: 8 }}>MICAH MISHAEL</div>
-              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 700, lineHeight: 1.1, letterSpacing: "-0.3px" }}>
-                Lead Finder
+              <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "#A07828", marginBottom: 8 }}>MICAH MISHAEL · LEAD INTELLIGENCE</div>
+              <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "clamp(24px, 4vw, 36px)", fontWeight: 500, lineHeight: 1.1, letterSpacing: "-0.3px" }}>
+                Lead <span style={{ background: "linear-gradient(135deg, #7A5C1A 0%, #A07828 40%, #A07828 60%, #A07828 80%, #7A5C1A 100%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Empire</span> <span style={{ color: "rgba(26,23,18,0.12)" }}>Pro</span>
               </h1>
-              <div style={{ fontSize: 12, color: "#6B6B66", marginTop: 5, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>Find businesses and save them to the CRM</div>
+              <div style={{ fontSize: 12, color: "#9A9186", marginTop: 5, fontFamily: "'Montserrat', sans-serif" }}>Find · Save · Close · Export</div>
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              <div title="Searches left today. One click on Search = one search." style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(17,17,17,0.2)", color: quota && quota.remaining === 0 ? "#9B2C2C" : "#4A4A46" }}>
+              <div title="Searches left today. One click on Search = one search." style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(160,120,40,0.2)", color: quota && quota.remaining === 0 ? "#B23B3B" : "#5A5248" }}>
                 {quota ? `${quota.remaining} of ${quota.daily_limit} searches left today` : "Checking searches…"}
               </div>
-              {CRM_URL && <a href={CRM_URL} target="_blank" rel="noreferrer" style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, background: "#111111", color: "#FAFAF7", textDecoration: "none" }}>Open CRM ↗</a>}
-              <button onClick={onLogout} style={{ fontSize: 11, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(17,17,17,0.15)", background: "transparent", cursor: "pointer", color: "#4A4A46" }}>Log out {profile?.full_name ? `(${profile.full_name.split(" ")[0]})` : ""}</button>
-              <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, color: "#6B6B66", display: "flex", alignItems: "center", gap: 6 }}>
-                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#111111", animation: "pulse 2s infinite" }} />
+              {CRM_URL && <a href={CRM_URL} target="_blank" rel="noreferrer" style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, background: "#1A1712", color: "#FAFAF7", textDecoration: "none" }}>Open CRM ↗</a>}
+              <button onClick={onLogout} style={{ fontSize: 11, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(160,120,40,0.15)", background: "transparent", cursor: "pointer", color: "#5A5248" }}>Log out {profile?.full_name ? `(${profile.full_name.split(" ")[0]})` : ""}</button>
+              <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, color: "#9A9186", display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#A07828", animation: "pulse 2s infinite" }} />
                 {stats.total} leads · {stats.closed} closed
               </div>
               <input
@@ -1463,10 +1463,10 @@ useEffect(() => {
                   e.target.value = "";
                 }}
               />
-              <button onClick={() => importInputRef.current?.click()} style={{ background: "rgba(17,17,17,0.04)", border: "1px solid #E4E2DC", color: "#4A4A46", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>↑ Import</button>
-              <button onClick={exportCSV} disabled={!crmLeads.length} style={{ background: "rgba(17,17,17,0.04)", border: "1px solid #E4E2DC", color: crmLeads.length ? "#4A4A46" : "#6B6B66", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>↓ CSV</button>
-              <button onClick={() => { downloadFile("mm_leads.json", JSON.stringify(crmLeads, null, 2), "application/json"); toast.show("JSON exported ✓"); }} disabled={!crmLeads.length} style={{ background: "rgba(17,17,17,0.04)", border: "1px solid #E4E2DC", color: crmLeads.length ? "#4A4A46" : "#6B6B66", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>↓ JSON</button>
-              <button onClick={() => { if (crmLeads.length === 0) return; if (window.confirm(`Delete all ${crmLeads.length} leads? This cannot be undone.`)) { setCrmLeads([]); toast.show("CRM cleared"); } }} disabled={!crmLeads.length} style={{ background: "rgba(155,44,44,0.07)", border: "1px solid rgba(155,44,44,0.18)", color: crmLeads.length ? "#9B2C2C" : "#6B6B66", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>✕ Clear saved list</button>
+              <button onClick={() => importInputRef.current?.click()} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: "#5A5248", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: "pointer", fontFamily: "'Montserrat', sans-serif" }}>↑ Import</button>
+              <button onClick={exportCSV} disabled={!crmLeads.length} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: crmLeads.length ? "#5A5248" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>↓ CSV</button>
+              <button onClick={() => { downloadFile("mm_leads.json", JSON.stringify(crmLeads, null, 2), "application/json"); toast.show("JSON exported ✓"); }} disabled={!crmLeads.length} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: crmLeads.length ? "#5A5248" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>↓ JSON</button>
+              <button onClick={() => { if (crmLeads.length === 0) return; if (window.confirm(`Delete all ${crmLeads.length} leads? This cannot be undone.`)) { setCrmLeads([]); toast.show("CRM cleared"); } }} disabled={!crmLeads.length} style={{ background: "rgba(224,82,82,0.07)", border: "1px solid rgba(224,82,82,0.18)", color: crmLeads.length ? "#E05252" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>✕ Clear CRM</button>
             </div>
           </header>
 
@@ -1474,7 +1474,7 @@ useEffect(() => {
           <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
             <button style={tabStyle(activeTab === "finder")} onClick={() => setActiveTab("finder")}>🔭 Lead Finder</button>
             <button style={tabStyle(activeTab === "crm")} onClick={() => setActiveTab("crm")}>
-              📋 Saved leads {crmLeads.length > 0 && <span style={{ marginLeft: 6, background: "rgba(0,0,0,0.2)", padding: "1px 7px", borderRadius: 5, fontSize: 11 }}>{crmLeads.length}</span>}
+              📋 CRM {crmLeads.length > 0 && <span style={{ marginLeft: 6, background: "rgba(0,0,0,0.2)", padding: "1px 7px", borderRadius: 5, fontSize: 11 }}>{crmLeads.length}</span>}
             </button>
           </div>
 
@@ -1484,8 +1484,8 @@ useEffect(() => {
 
               {/* Controls sidebar */}
               <div style={{ position: "sticky", top: 20 }}>
-                <div style={{ background: "#F2F1EC", border: "1px solid rgba(17,17,17,0.18)", boxShadow: "0 1px 4px rgba(17,17,17,0.06)", borderRadius: 16, padding: 22, display: "flex", flexDirection: "column", gap: 18 }}>
-                  <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, fontWeight: 700, color: "#111111", letterSpacing: "0.15em" }}>PROSPECTING</div>
+                <div style={{ background: "#F4F1EB", border: "1px solid rgba(160,120,40,0.18)", boxShadow: "0 1px 4px rgba(26,23,18,0.06)", borderRadius: 16, padding: 22, display: "flex", flexDirection: "column", gap: 18 }}>
+                  <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, fontWeight: 700, color: "#A07828", letterSpacing: "0.15em" }}>PROSPECTING</div>
 
                   <div>
                     <label style={labelStyle}>LEAD TYPE</label>
@@ -1495,14 +1495,14 @@ useEffect(() => {
                           setSearchMode(m.id); setResults([]); setSearched(false); setInspections({});
                         }} title={m.hint} style={{
                           display: "flex", alignItems: "flex-start", gap: 10, textAlign: "left",
-                          background: searchMode === m.id ? "rgba(17,17,17,0.10)" : "rgba(17,17,17,0.03)",
-                          border: `1px solid ${searchMode === m.id ? "rgba(17,17,17,0.4)" : "rgba(17,17,17,0.07)"}`,
+                          background: searchMode === m.id ? "rgba(160,120,40,0.10)" : "rgba(160,120,40,0.03)",
+                          border: `1px solid ${searchMode === m.id ? "rgba(160,120,40,0.4)" : "rgba(160,120,40,0.07)"}`,
                           borderRadius: 5, padding: "10px 12px", cursor: "pointer", transition: "all 0.15s",
                         }}>
-                          <span style={{ fontSize: 14, color: searchMode === m.id ? "#111111" : "#6B6B66", lineHeight: 1.4 }}>{m.icon}</span>
+                          <span style={{ fontSize: 14, color: searchMode === m.id ? "#A07828" : "#9A9186", lineHeight: 1.4 }}>{m.icon}</span>
                           <span>
-                            <div style={{ fontSize: 12, fontWeight: 700, color: searchMode === m.id ? "#111111" : "#4A4A46", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>{m.label}</div>
-                            <div style={{ fontSize: 10, color: "#6B6B66", marginTop: 2, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", lineHeight: 1.4 }}>{m.hint}</div>
+                            <div style={{ fontSize: 12, fontWeight: 700, color: searchMode === m.id ? "#1A1712" : "#5A5248", fontFamily: "'Montserrat', sans-serif" }}>{m.label}</div>
+                            <div style={{ fontSize: 10, color: "#9A9186", marginTop: 2, fontFamily: "'Montserrat', sans-serif", lineHeight: 1.4 }}>{m.hint}</div>
                           </span>
                         </button>
                       ))}
@@ -1582,11 +1582,11 @@ useEffect(() => {
                   <div style={{ display: "flex", gap: 8 }}>
                     <button onClick={searchPlaces} disabled={loading || !canSearch} style={{
                       flex: 1,
-                      background: (canSearch && !loading) ? "#111111" : "rgba(17,17,17,0.06)",
-                      color: (canSearch && !loading) ? "#FAFAF7" : "#6B6B66",
+                      background: (canSearch && !loading) ? "#C9A84C" : "rgba(160,120,40,0.06)",
+                      color: (canSearch && !loading) ? "#1A1712" : "#9A9186",
                       border: "none", borderRadius: 5, padding: "14px 0",
                       fontWeight: 700, fontSize: 14, cursor: (loading || !canSearch) ? "default" : "pointer",
-                      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s",
+                      fontFamily: "'Montserrat', sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all 0.2s",
                     }}>
                       {loading
                         ? <><span style={{ width: 14, height: 14, border: "2px solid #FAFAF7", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 0.7s linear infinite", display: "inline-block" }} /> {fetchProgress.fetched > 0 ? `Fetched ${fetchProgress.fetched}…` : "Searching…"}</>
@@ -1594,24 +1594,24 @@ useEffect(() => {
                     </button>
                     {loading && (
                       <button onClick={stopSearch} title="Stop searching and keep current results" style={{
-                        background: "rgba(17,17,17,0.10)", border: "1px solid rgba(17,17,17,0.35)",
-                        color: "#111111", borderRadius: 5, padding: "0 18px",
-                        fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif",
+                        background: "rgba(160,120,40,0.10)", border: "1px solid rgba(160,120,40,0.35)",
+                        color: "#A07828", borderRadius: 5, padding: "0 18px",
+                        fontWeight: 700, fontSize: 14, cursor: "pointer", fontFamily: "'Montserrat', sans-serif",
                       }}>■ Stop</button>
                     )}
                   </div>
 
                   {/* Divider + manual */}
-                  <div style={{ borderTop: "1px solid rgba(17,17,17,0.06)", paddingTop: 16 }}>
-                    <div style={{ fontSize: 10, color: "#6B6B66", letterSpacing: "0.1em", marginBottom: 10, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>OTHER LEAD SOURCES</div>
-                    <button onClick={() => setShowAddModal(true)} style={{ width: "100%", background: "rgba(17,17,17,0.07)", border: "1px solid rgba(17,17,17,0.18)", color: "#111111", borderRadius: 5, padding: "11px 0", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginBottom: 8 }}>
+                  <div style={{ borderTop: "1px solid rgba(160,120,40,0.06)", paddingTop: 16 }}>
+                    <div style={{ fontSize: 10, color: "#9A9186", letterSpacing: "0.1em", marginBottom: 10, fontFamily: "'Montserrat', sans-serif" }}>OTHER LEAD SOURCES</div>
+                    <button onClick={() => setShowAddModal(true)} style={{ width: "100%", background: "rgba(160,120,40,0.07)", border: "1px solid rgba(160,120,40,0.18)", color: "#A07828", borderRadius: 5, padding: "11px 0", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "'Montserrat', sans-serif", marginBottom: 8 }}>
                       + Add Lead Manually
                     </button>
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                       {MANUAL_SOURCES.slice(0, 4).map(s => (
-                        <button key={s.id} onClick={() => setShowAddModal(true)} title={s.hint} style={{ background: "#F2F1EC", boxShadow: "0 1px 4px rgba(17,17,17,0.06)", color: "#4A4A46", borderRadius: 5, padding: "8px 6px", fontSize: 11, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", transition: "all 0.15s", textAlign: "center" }}
-                          onMouseEnter={e => { e.currentTarget.style.color = "#111111"; e.currentTarget.style.borderColor = "rgba(17,17,17,0.25)"; }}
-                          onMouseLeave={e => { e.currentTarget.style.color = "#4A4A46"; e.currentTarget.style.borderColor = "rgba(17,17,17,0.07)"; }}>
+                        <button key={s.id} onClick={() => setShowAddModal(true)} title={s.hint} style={{ background: "#F4F1EB", boxShadow: "0 1px 4px rgba(26,23,18,0.06)", color: "#5A5248", borderRadius: 5, padding: "8px 6px", fontSize: 11, cursor: "pointer", fontFamily: "'Montserrat', sans-serif", transition: "all 0.15s", textAlign: "center" }}
+                          onMouseEnter={e => { e.currentTarget.style.color = "#A07828"; e.currentTarget.style.borderColor = "rgba(160,120,40,0.25)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.color = "#5A5248"; e.currentTarget.style.borderColor = "rgba(160,120,40,0.07)"; }}>
                           {s.icon}<br /><span style={{ fontSize: 10 }}>{s.label.split("/")[0].trim()}</span>
                         </button>
                       ))}
@@ -1623,31 +1623,31 @@ useEffect(() => {
               {/* Results */}
               <div style={{ minWidth: 0 }}>
                 {searchError && (
-                  <div style={{ background: "rgba(155,44,44,0.09)", border: "1px solid rgba(155,44,44,0.2)", borderRadius: 5, padding: "14px 18px", color: "#9B2C2C", fontSize: 13, marginBottom: 16, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                  <div style={{ background: "rgba(224,82,82,0.09)", border: "1px solid rgba(224,82,82,0.2)", borderRadius: 5, padding: "14px 18px", color: "#E05252", fontSize: 13, marginBottom: 16, fontFamily: "'Montserrat', sans-serif" }}>
                     ⚠ {searchError}
                   </div>
                 )}
 
                 {/* Pagination progress bar */}
                 {loading && fetchProgress.fetched > 0 && (
-                  <div style={{ marginBottom: 16, background: "rgba(17,17,17,0.03)", border: "1px solid rgba(17,17,17,0.06)", borderRadius: 5, padding: "14px 18px" }}>
+                  <div style={{ marginBottom: 16, background: "rgba(160,120,40,0.03)", border: "1px solid rgba(160,120,40,0.06)", borderRadius: 5, padding: "14px 18px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                      <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, color: "#111111" }}>
+                      <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, color: "#A07828" }}>
                         🔄 Scanning cities…
                       </span>
-                      <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, color: "#4A4A46" }}>
-                        {fetchProgress.fetched} scanned · <span style={{ color: "#111111" }}>{fetchProgress.found} {searchMode === "all" ? "" : searchMode === "no_site" ? "no-site " : "matching "}leads</span>
+                      <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 11, color: "#5A5248" }}>
+                        {fetchProgress.fetched} scanned · <span style={{ color: "#A07828" }}>{fetchProgress.found} {searchMode === "all" ? "" : searchMode === "no_site" ? "no-site " : "matching "}leads</span>
                       </span>
                     </div>
-                    <div style={{ height: 3, background: "rgba(17,17,17,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                    <div style={{ height: 3, background: "rgba(160,120,40,0.06)", borderRadius: 2, overflow: "hidden" }}>
                       <div style={{
                         height: "100%", borderRadius: 2,
                         width: `${Math.min((fetchProgress.fetched / 1000) * 100, 100)}%`,
-                        background: "#111111",
+                        background: "linear-gradient(90deg, #7A5C1A, #A07828, #A07828)",
                         transition: "width 0.4s ease",
                       }} />
                     </div>
-                    <div style={{ fontSize: 10, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginTop: 7 }}>
+                    <div style={{ fontSize: 10, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginTop: 7 }}>
                       Multi-city search active · results appear as each city loads
                     </div>
                   </div>
@@ -1655,41 +1655,41 @@ useEffect(() => {
 
                 {searched && !searchError && (
                   <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-                    <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700, fontSize: 15 }}>
-                      <span style={{ color: "#111111" }}>{filteredResults.length}</span>
+                    <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: 15 }}>
+                      <span style={{ color: "#A07828" }}>{filteredResults.length}</span>
                       {cellOnly && results.length !== filteredResults.length && (
-                        <span style={{ fontSize: 11, color: "#4A4A46", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}> of {results.length}</span>
+                        <span style={{ fontSize: 11, color: "#5A5248", fontFamily: "'Montserrat', sans-serif" }}> of {results.length}</span>
                       )}
                       {" "}{searchMode === "all" ? "" : searchMode === "no_site" ? "website-less " : searchMode === "outdated_site" ? "websites to scan for " : "stores to scan for "}{activeSearchTerm}s in {COUNTRIES.find(c => c.value === country)?.hasSub === "usa_states" ? usaState : COUNTRIES.find(c => c.value === country)?.hasSub === "canada_provinces" ? canadaProvince : COUNTRIES.find(c => c.value === country)?.hasSub === "sa_cities" ? city : country}
-                      {fetchProgress.fetched > 20 && <span style={{ fontSize: 11, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginLeft: 10 }}>from {fetchProgress.fetched} scanned</span>}
+                      {fetchProgress.fetched > 20 && <span style={{ fontSize: 11, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginLeft: 10 }}>from {fetchProgress.fetched} scanned</span>}
                     </div>
                     <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
                       {/* Cell only toggle */}
                       <button onClick={() => setCellOnly(v => !v)} title="Show only SA cell numbers (06x / 07x / 08x)" style={{
-                        fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                        background: cellOnly ? "rgba(17,17,17,0.15)" : "rgba(17,17,17,0.04)",
-                        border: `1px solid ${cellOnly ? "rgba(17,17,17,0.45)" : "rgba(17,17,17,0.07)"}`,
-                        color: cellOnly ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                        fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                        background: cellOnly ? "rgba(160,120,40,0.15)" : "rgba(160,120,40,0.04)",
+                        border: `1px solid ${cellOnly ? "rgba(160,120,40,0.45)" : "rgba(160,120,40,0.07)"}`,
+                        color: cellOnly ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                       }}>📱 Cell Only</button>
                       {(searchMode === "outdated_site" || searchMode === "no_ecommerce") && (
                         <>
                           <button onClick={() => setHideClean(v => !v)} title="Show only sites flagged as outdated / missing a store" style={{
-                            fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                            background: hideClean ? "rgba(17,17,17,0.15)" : "rgba(17,17,17,0.04)",
-                            border: `1px solid ${hideClean ? "rgba(17,17,17,0.45)" : "rgba(17,17,17,0.07)"}`,
-                            color: hideClean ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                            fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                            background: hideClean ? "rgba(160,120,40,0.15)" : "rgba(160,120,40,0.04)",
+                            border: `1px solid ${hideClean ? "rgba(160,120,40,0.45)" : "rgba(160,120,40,0.07)"}`,
+                            color: hideClean ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                           }}>{searchMode === "outdated_site" ? "Show Only Outdated" : "Show Only No-Store"}</button>
                           {scanning ? (
                             <button onClick={stopScan} title="Stop scanning" style={{
-                              fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                              background: "rgba(17,17,17,0.10)", border: "1px solid rgba(17,17,17,0.35)",
-                              color: "#111111", cursor: "pointer", transition: "all 0.15s",
+                              fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                              background: "rgba(160,120,40,0.10)", border: "1px solid rgba(160,120,40,0.35)",
+                              color: "#A07828", cursor: "pointer", transition: "all 0.15s",
                             }}>■ Stop Scan</button>
                           ) : (
                             <button onClick={inspectAllVisible} style={{
-                              fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                              background: "rgba(17,17,17,0.10)", border: "1px solid rgba(17,17,17,0.3)",
-                              color: "#111111", cursor: "pointer", transition: "all 0.15s",
+                              fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                              background: "rgba(122,92,26,0.10)", border: "1px solid rgba(122,92,26,0.3)",
+                              color: "#7A5C1A", cursor: "pointer", transition: "all 0.15s",
                             }}>⌕ Scan All Visible</button>
                           )}
                         </>
@@ -1701,14 +1701,14 @@ useEffect(() => {
                         { key: "rating", label: "Top Rated" },
                       ].map(s => (
                         <button key={s.key} onClick={() => setSortBy(s.key)} style={{
-                          fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                          background: sortBy === s.key ? "rgba(17,17,17,0.12)" : "rgba(17,17,17,0.04)",
-                          border: `1px solid ${sortBy === s.key ? "rgba(17,17,17,0.4)" : "rgba(17,17,17,0.07)"}`,
-                          color: sortBy === s.key ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                          fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                          background: sortBy === s.key ? "rgba(160,120,40,0.12)" : "rgba(160,120,40,0.04)",
+                          border: `1px solid ${sortBy === s.key ? "rgba(160,120,40,0.4)" : "rgba(160,120,40,0.07)"}`,
+                          color: sortBy === s.key ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                         }}>{s.label}</button>
                       ))}
                       {filteredResults.length > 0 && (
-                        <button onClick={() => { filteredResults.filter(p => !crmLeads.find(l => l.id === p.id)).forEach(p => savePlace(p)); toast.show("All saved to CRM ✓"); }} style={{ background: "rgba(17,17,17,0.09)", border: "1px solid rgba(17,17,17,0.22)", color: "#111111", padding: "5px 16px", borderRadius: 32, fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                        <button onClick={() => { filteredResults.filter(p => !crmLeads.find(l => l.id === p.id)).forEach(p => savePlace(p)); toast.show("All saved to CRM ✓"); }} style={{ background: "rgba(160,120,40,0.09)", border: "1px solid rgba(160,120,40,0.22)", color: "#A07828", padding: "5px 16px", borderRadius: 32, fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: "'Montserrat', sans-serif" }}>
                           Save All
                         </button>
                       )}
@@ -1717,24 +1717,24 @@ useEffect(() => {
                 )}
 
                 {searched && filteredResults.length === 0 && !loading && !searchError && (
-                  <div style={{ textAlign: "center", padding: "80px 20px", color: "rgba(17,17,17,0.15)", border: "1px dashed rgba(17,17,17,0.05)", borderRadius: 16 }}>
+                  <div style={{ textAlign: "center", padding: "80px 20px", color: "rgba(26,23,18,0.15)", border: "1px dashed rgba(160,120,40,0.05)", borderRadius: 16 }}>
                     <div style={{ fontSize: 36, marginBottom: 12 }}>🎯</div>
-                    <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700 }}>
+                    <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
                       {cellOnly && results.length > 0 ? "No cell number leads in these results." : hideClean && results.length > 0 ? "No matches left after scanning." : searchMode === "all" ? "No businesses found." : searchMode === "no_site" ? "No website-less businesses found." : searchMode === "outdated_site" ? "No businesses with websites found." : "No retail businesses with websites found."}
                     </div>
-                    <div style={{ fontSize: 12, color: "#6B6B66", marginTop: 6, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                    <div style={{ fontSize: 12, color: "#9A9186", marginTop: 6, fontFamily: "'Montserrat', sans-serif" }}>
                       {cellOnly && results.length > 0 ? "Turn off Cell Only to see all leads." : hideClean && results.length > 0 ? "Turn off the hide toggle to see everything." : "Try a different category or city."}
                     </div>
                   </div>
                 )}
 
                 {!searched && !loading && (
-                  <div style={{ textAlign: "center", padding: "100px 20px", color: "rgba(17,17,17,0.12)", border: "1px dashed rgba(17,17,17,0.05)", borderRadius: 32 }}>
+                  <div style={{ textAlign: "center", padding: "100px 20px", color: "rgba(26,23,18,0.12)", border: "1px dashed rgba(160,120,40,0.05)", borderRadius: 32 }}>
                     <div style={{ fontSize: 48, marginBottom: 14 }}>🔭</div>
-                    <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 18, fontWeight: 500 }}>
+                    <div style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 18, fontWeight: 500 }}>
                       {searchMode === "all" ? "Search any business — no filters" : searchMode === "no_site" ? "Find businesses without websites" : searchMode === "outdated_site" ? "Find businesses with outdated websites" : "Find retail without an online store"}
                     </div>
-                    <div style={{ fontSize: 12, color: "#6B6B66", marginTop: 8, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                    <div style={{ fontSize: 12, color: "#9A9186", marginTop: 8, fontFamily: "'Montserrat', sans-serif" }}>
                       {searchMode === "all" ? "Pick a city + category → get every match" : searchMode === "no_site" ? "Pick a city + category → pitch them a website" : searchMode === "outdated_site" ? "Search, then tap “Re-check site” or “Scan All Visible”" : "Search, then scan to flag stores with no cart / checkout"}
                     </div>
                   </div>
@@ -1757,26 +1757,26 @@ useEffect(() => {
               {/* Stats */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: 10, marginBottom: 24 }}>
                 {[
-                  { label: "Total", value: stats.total, color: "#111111" },
-                  { label: "Hot (80+)", value: stats.hot, color: "#111111" },
-                  { label: "Closed", value: stats.closed, color: "#111111" },
-                  { label: "From Google", value: stats.google, color: "#111111" },
-                  { label: "Manual", value: stats.manual, color: "#111111" },
+                  { label: "Total", value: stats.total, color: "#1A1712" },
+                  { label: "Hot (80+)", value: stats.hot, color: "#A07828" },
+                  { label: "Closed", value: stats.closed, color: "#A07828" },
+                  { label: "From Google", value: stats.google, color: "#7A5C1A" },
+                  { label: "Manual", value: stats.manual, color: "#A07828" },
                 ].map(s => (
-                  <div key={s.label} style={{ background: "#F2F1EC", border: "1px solid rgba(17,17,17,0.18)", borderRadius: 8, padding: "13px 15px" }}>
-                    <div style={{ fontSize: 9, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", marginBottom: 6, letterSpacing: "0.1em" }}>{s.label.toUpperCase()}</div>
-                    <div style={{ fontSize: 28, fontWeight: 500, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", color: s.color }}>{s.value}</div>
+                  <div key={s.label} style={{ background: "#F4F1EB", border: "1px solid rgba(160,120,40,0.18)", borderRadius: 8, padding: "13px 15px" }}>
+                    <div style={{ fontSize: 9, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", marginBottom: 6, letterSpacing: "0.1em" }}>{s.label.toUpperCase()}</div>
+                    <div style={{ fontSize: 28, fontWeight: 500, fontFamily: "'Montserrat', sans-serif", color: s.color }}>{s.value}</div>
                   </div>
                 ))}
               </div>
 
               {/* Toolbar */}
               <div style={{ display: "flex", gap: 10, marginBottom: 18, flexWrap: "wrap", alignItems: "center" }}>
-                <input value={crmSearch} onChange={e => setCrmSearch(e.target.value)} placeholder="Search by name, company, phone, category…" style={{ flex: 1, minWidth: 180, background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: "#111111", padding: "10px 14px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 13, outline: "none" }} />
+                <input value={crmSearch} onChange={e => setCrmSearch(e.target.value)} placeholder="Search by name, company, phone, category…" style={{ flex: 1, minWidth: 180, background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.09)", borderRadius: 5, color: "#1A1712", padding: "10px 14px", fontFamily: "'Montserrat', sans-serif", fontSize: 13, outline: "none" }} />
 
                 {/* Country filter */}
                 {crmUniqueCountries.length > 0 && (
-                  <select value={crmCountryFilter} onChange={e => { setCrmCountryFilter(e.target.value); setCrmCityFilter("all"); }} style={{ background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: crmCountryFilter !== "all" ? "#111111" : "#4A4A46", padding: "9px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
+                  <select value={crmCountryFilter} onChange={e => { setCrmCountryFilter(e.target.value); setCrmCityFilter("all"); }} style={{ background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.09)", borderRadius: 5, color: crmCountryFilter !== "all" ? "#A07828" : "#5A5248", padding: "9px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
                     <option value="all">🌍 All Countries</option>
                     {crmUniqueCountries.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -1784,7 +1784,7 @@ useEffect(() => {
 
                 {/* City filter */}
                 {crmUniqueCities.length > 0 && (
-                  <select value={crmCityFilter} onChange={e => setCrmCityFilter(e.target.value)} style={{ background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: crmCityFilter !== "all" ? "#111111" : "#4A4A46", padding: "9px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
+                  <select value={crmCityFilter} onChange={e => setCrmCityFilter(e.target.value)} style={{ background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.09)", borderRadius: 5, color: crmCityFilter !== "all" ? "#A07828" : "#5A5248", padding: "9px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
                     <option value="all">📍 All Cities</option>
                     {crmUniqueCities.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -1792,7 +1792,7 @@ useEffect(() => {
 
                 {/* Category filter */}
                 {crmUniqueCategories.length > 0 && (
-                  <select value={crmCategoryFilter} onChange={e => setCrmCategoryFilter(e.target.value)} style={{ background: "rgba(17,17,17,0.05)", border: "1px solid #E4E2DC", borderRadius: 5, color: crmCategoryFilter !== "all" ? "#111111" : "#4A4A46", padding: "9px 12px", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
+                  <select value={crmCategoryFilter} onChange={e => setCrmCategoryFilter(e.target.value)} style={{ background: "rgba(160,120,40,0.05)", border: "1px solid rgba(160,120,40,0.09)", borderRadius: 5, color: crmCategoryFilter !== "all" ? "#A07828" : "#5A5248", padding: "9px 12px", fontFamily: "'Montserrat', sans-serif", fontSize: 11, outline: "none", cursor: "pointer" }}>
                     <option value="all">🏷 All Categories</option>
                     {crmUniqueCategories.map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
@@ -1804,17 +1804,17 @@ useEffect(() => {
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap", flex: 1 }}>
                   {["all", ...STAGES].map(f => (
                     <button key={f} onClick={() => setCrmFilter(f)} style={{
-                      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                      background: crmFilter === f ? "rgba(17,17,17,0.12)" : "rgba(17,17,17,0.04)",
-                      border: `1px solid ${crmFilter === f ? "rgba(17,17,17,0.4)" : "rgba(17,17,17,0.07)"}`,
-                      color: crmFilter === f ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                      fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                      background: crmFilter === f ? "rgba(160,120,40,0.12)" : "rgba(160,120,40,0.04)",
+                      border: `1px solid ${crmFilter === f ? "rgba(160,120,40,0.4)" : "rgba(160,120,40,0.07)"}`,
+                      color: crmFilter === f ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                     }}>{f === "all" ? "All" : f}</button>
                   ))}
                 </div>
 
                 {/* Sort buttons */}
                 <div style={{ display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center" }}>
-                  <span style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 9, color: "#6B6B66", letterSpacing: "0.08em" }}>SORT</span>
+                  <span style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 9, color: "#9A9186", letterSpacing: "0.08em" }}>SORT</span>
                   {[
                     { key: "newest", label: "Newest" },
                     { key: "alpha", label: "A→Z" },
@@ -1823,30 +1823,30 @@ useEffect(() => {
                     { key: "rating", label: "Top Rated" },
                   ].map(s => (
                     <button key={s.key} onClick={() => setCrmSortBy(s.key)} style={{
-                      fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                      background: crmSortBy === s.key ? "rgba(17,17,17,0.12)" : "rgba(17,17,17,0.04)",
-                      border: `1px solid ${crmSortBy === s.key ? "rgba(17,17,17,0.4)" : "rgba(17,17,17,0.07)"}`,
-                      color: crmSortBy === s.key ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                      fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                      background: crmSortBy === s.key ? "rgba(160,120,40,0.12)" : "rgba(160,120,40,0.04)",
+                      border: `1px solid ${crmSortBy === s.key ? "rgba(160,120,40,0.4)" : "rgba(160,120,40,0.07)"}`,
+                      color: crmSortBy === s.key ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                     }}>{s.label}</button>
                   ))}
                   <button onClick={() => setCrmCellOnly(v => !v)} title="Show only SA cell numbers (06x / 07x / 08x)" style={{
-                    fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
-                    background: crmCellOnly ? "rgba(17,17,17,0.15)" : "rgba(17,17,17,0.04)",
-                    border: `1px solid ${crmCellOnly ? "rgba(17,17,17,0.45)" : "rgba(17,17,17,0.07)"}`,
-                    color: crmCellOnly ? "#111111" : "#4A4A46", cursor: "pointer", transition: "all 0.15s",
+                    fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                    background: crmCellOnly ? "rgba(160,120,40,0.15)" : "rgba(160,120,40,0.04)",
+                    border: `1px solid ${crmCellOnly ? "rgba(160,120,40,0.45)" : "rgba(160,120,40,0.07)"}`,
+                    color: crmCellOnly ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                   }}>📱 Cell Only</button>
                 </div>
 
-                <button onClick={() => setShowAddModal(true)} style={{ background: "#111111", color: "#FAFAF7", border: "none", padding: "10px 20px", borderRadius: 5, fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", whiteSpace: "nowrap" }}>+ Add Lead</button>
+                <button onClick={() => setShowAddModal(true)} style={{ background: "#C9A84C", color: "#1A1712", border: "none", padding: "10px 20px", borderRadius: 5, fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "'Montserrat', sans-serif", whiteSpace: "nowrap" }}>+ Add Lead</button>
               </div>
 
               {filteredCRM.length === 0 ? (
-                <div style={{ textAlign: "center", padding: "80px 20px", color: "rgba(17,17,17,0.12)", border: "1px dashed rgba(17,17,17,0.05)", borderRadius: 16 }}>
+                <div style={{ textAlign: "center", padding: "80px 20px", color: "rgba(26,23,18,0.12)", border: "1px dashed rgba(160,120,40,0.05)", borderRadius: 16 }}>
                   <div style={{ fontSize: 36, marginBottom: 12 }}>📋</div>
-                  <div style={{ fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", fontWeight: 700 }}>
+                  <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700 }}>
                     {crmLeads.length === 0 ? "No leads yet." : "No leads match your filter."}
                   </div>
-                  <div style={{ fontSize: 12, color: "#6B6B66", marginTop: 6, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif" }}>
+                  <div style={{ fontSize: 12, color: "#9A9186", marginTop: 6, fontFamily: "'Montserrat', sans-serif" }}>
                     {crmLeads.length === 0 ? "Use the Lead Finder tab or add manually." : "Try clearing filters."}
                   </div>
                 </div>
@@ -1860,8 +1860,8 @@ useEffect(() => {
             </div>
           )}
 
-          <footer style={{ marginTop: 60, textAlign: "center", fontSize: 11, color: "#6B6B66", fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", padding: "0 24px" }}>
-            Micah Mishael · Lead Finder · Powered by Google Places
+          <footer style={{ marginTop: 60, textAlign: "center", fontSize: 11, color: "#9A9186", fontFamily: "'Montserrat', sans-serif", padding: "0 24px" }}>
+            Micah Mishael · Lead Empire Pro · Powered by Google Places API · v2.0
           </footer>
         </div>
       </div>
@@ -1898,22 +1898,22 @@ export default function App() {
     if (error) setErr(error.message === "Invalid login credentials" ? "The email or password is wrong." : error.message);
   }
 
-  const box = { boxSizing: "border-box", width: "calc(100% - 32px)", maxWidth: 380, margin: "12vh auto", padding: 28, background: "#fff", border: "1px solid rgba(17,17,17,0.15)", borderRadius: 6, fontFamily: "'Jost', 'Helvetica Neue', Arial, sans-serif", color: "#111111" };
-  const inp = { boxSizing: "border-box", display: "block", width: "100%", padding: "11px 12px", border: "1px solid rgba(17,17,17,0.2)", borderRadius: 5, fontSize: 14, marginTop: 6 };
-  const btn = { width: "100%", padding: "12px", background: "#111111", color: "#FAFAF7", border: "none", borderRadius: 5, fontWeight: 700, cursor: "pointer", marginTop: 14 };
+  const box = { boxSizing: "border-box", width: "calc(100% - 32px)", maxWidth: 380, margin: "12vh auto", padding: 28, background: "#fff", border: "1px solid rgba(160,120,40,0.15)", borderRadius: 6, fontFamily: "'Montserrat', sans-serif", color: "#1A1712" };
+  const inp = { boxSizing: "border-box", display: "block", width: "100%", padding: "11px 12px", border: "1px solid rgba(160,120,40,0.2)", borderRadius: 5, fontSize: 14, marginTop: 6 };
+  const btn = { width: "100%", padding: "12px", background: "#1A1712", color: "#FAFAF7", border: "none", borderRadius: 5, fontWeight: 700, cursor: "pointer", marginTop: 14 };
 
   if (!ready) return null;
   if (!session) {
     return (
       <form style={box} onSubmit={login}>
-        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "#111111" }}>MICAH MISHAEL · LEAD FINDER</div>
+        <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.2em", color: "#A07828" }}>MICAH MISHAEL · LEAD FINDER</div>
         <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 32, margin: "8px 0 16px" }}>Log in</h1>
         <label style={{ fontSize: 12, fontWeight: 600 }}>Email<input style={inp} type="email" value={email} onChange={e => setEmail(e.target.value)} required autoComplete="email" /></label>
         <div style={{ height: 10 }} />
         <label style={{ fontSize: 12, fontWeight: 600 }}>Password<input style={inp} type="password" value={password} onChange={e => setPassword(e.target.value)} required autoComplete="current-password" /></label>
-        {err && <div style={{ color: "#9B2C2C", fontSize: 13, marginTop: 10 }}>{err}</div>}
+        {err && <div style={{ color: "#B23B3B", fontSize: 13, marginTop: 10 }}>{err}</div>}
         <button style={btn} disabled={busy}>{busy ? "Please wait…" : "Log in"}</button>
-        <p style={{ fontSize: 12, color: "#6B6B66", marginTop: 12 }}>Use your Micah Mishael CRM login.</p>
+        <p style={{ fontSize: 12, color: "#9A9186", marginTop: 12 }}>Use your Micah Mishael CRM login.</p>
       </form>
     );
   }
@@ -1922,9 +1922,9 @@ export default function App() {
     return (
       <div style={box}>
         <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 26 }}>{profile.active ? "Set your password first" : "Your account is not active"}</h2>
-        <p style={{ fontSize: 13, color: "#4A4A46", margin: "10px 0" }}>{profile.active ? "Log in to the CRM once and choose your own password, then come back." : "Ask Mishael to activate your account."}</p>
+        <p style={{ fontSize: 13, color: "#5A5248", margin: "10px 0" }}>{profile.active ? "Log in to the CRM once and choose your own password, then come back." : "Ask Mishael to activate your account."}</p>
         {CRM_URL && profile.active && <a href={CRM_URL} style={{ ...btn, display: "block", textAlign: "center", textDecoration: "none" }}>Open the CRM</a>}
-        <button style={{ ...btn, background: "transparent", color: "#111111", border: "1px solid #ccc" }} onClick={() => supabase.auth.signOut()}>Log out</button>
+        <button style={{ ...btn, background: "transparent", color: "#1A1712", border: "1px solid #ccc" }} onClick={() => supabase.auth.signOut()}>Log out</button>
       </div>
     );
   }
