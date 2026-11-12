@@ -1105,17 +1105,19 @@ useEffect(() => {
     let totalFetched = 0;
 
     try {
-      // Each area counts as one search against the daily limit
+      // One click = one search against the daily limit, however many suburbs it covers
       const { data: qd } = await supabase.rpc("my_search_quota");
       const remaining = qd?.[0]?.remaining ?? 0;
       if (remaining <= 0) throw new Error(`You have used all your searches for today (${qd?.[0]?.daily_limit ?? 0}). The limit resets at midnight.`);
-      if (locationQueries.length > remaining) {
-        toast.show(`This covers ${locationQueries.length} areas, but you have ${remaining} searches left today. Searching the first ${remaining}.`);
-        locationQueries = locationQueries.slice(0, remaining);
+      const MAX_AREAS = 25;
+      if (locationQueries.length > MAX_AREAS) {
+        toast.show(`This search covers ${locationQueries.length} areas. Searching the first ${MAX_AREAS}. Choose one city for a full search.`);
+        locationQueries = locationQueries.slice(0, MAX_AREAS);
       }
+      const searchId = crypto.randomUUID();
       for (const locationString of locationQueries) {
         if (searchStopRef.current) break;
-        const { data, error } = await supabase.functions.invoke("places-search", { body: { textQuery: `${term} in ${locationString}` } });
+        const { data, error } = await supabase.functions.invoke("places-search", { body: { textQuery: `${term} in ${locationString}`, searchId } });
         if (error) {
           let msg = error.message;
           try { const j = await error.context.json(); if (j?.error) msg = j.error; } catch { /* keep default */ }
@@ -1441,7 +1443,7 @@ useEffect(() => {
               <div style={{ fontSize: 12, color: "#9A9186", marginTop: 5, fontFamily: "'Montserrat', sans-serif" }}>Find · Save · Close · Export</div>
             </div>
             <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
-              <div title="Searches left today. One area = one search." style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(160,120,40,0.2)", color: quota && quota.remaining === 0 ? "#B23B3B" : "#5A5248" }}>
+              <div title="Searches left today. One click on Search = one search." style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, border: "1px solid rgba(160,120,40,0.2)", color: quota && quota.remaining === 0 ? "#B23B3B" : "#5A5248" }}>
                 {quota ? `${quota.remaining} of ${quota.daily_limit} searches left today` : "Checking searches…"}
               </div>
               {CRM_URL && <a href={CRM_URL} target="_blank" rel="noreferrer" style={{ fontSize: 11, fontWeight: 700, padding: "8px 12px", borderRadius: 5, background: "#1A1712", color: "#FAFAF7", textDecoration: "none" }}>Open CRM ↗</a>}
