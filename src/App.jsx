@@ -1466,7 +1466,7 @@ useEffect(() => {
               <button onClick={() => importInputRef.current?.click()} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: "#5A5248", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: "pointer", fontFamily: "'Montserrat', sans-serif" }}>↑ Import</button>
               <button onClick={exportCSV} disabled={!crmLeads.length} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: crmLeads.length ? "#5A5248" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>↓ CSV</button>
               <button onClick={() => { downloadFile("mm_leads.json", JSON.stringify(crmLeads, null, 2), "application/json"); toast.show("JSON exported ✓"); }} disabled={!crmLeads.length} style={{ background: "rgba(160,120,40,0.04)", border: "1px solid rgba(160,120,40,0.09)", color: crmLeads.length ? "#5A5248" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>↓ JSON</button>
-              <button onClick={() => { if (crmLeads.length === 0) return; if (window.confirm(`Delete all ${crmLeads.length} leads? This cannot be undone.`)) { setCrmLeads([]); toast.show("CRM cleared"); } }} disabled={!crmLeads.length} style={{ background: "rgba(224,82,82,0.07)", border: "1px solid rgba(224,82,82,0.18)", color: crmLeads.length ? "#E05252" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>✕ Clear CRM</button>
+              <button onClick={() => { if (crmLeads.length === 0) return; if (window.confirm(`Delete all ${crmLeads.length} leads? This cannot be undone.`)) { setCrmLeads([]); toast.show("CRM cleared"); } }} disabled={!crmLeads.length} style={{ background: "rgba(224,82,82,0.07)", border: "1px solid rgba(224,82,82,0.18)", color: crmLeads.length ? "#E05252" : "#9A9186", padding: "8px 14px", borderRadius: 5, fontSize: 11, cursor: crmLeads.length ? "pointer" : "default", fontFamily: "'Montserrat', sans-serif" }}>✕ Clear saved list</button>
             </div>
           </header>
 
@@ -1474,7 +1474,7 @@ useEffect(() => {
           <div style={{ display: "flex", gap: 8, marginBottom: 28 }}>
             <button style={tabStyle(activeTab === "finder")} onClick={() => setActiveTab("finder")}>🔭 Lead Finder</button>
             <button style={tabStyle(activeTab === "crm")} onClick={() => setActiveTab("crm")}>
-              📋 CRM {crmLeads.length > 0 && <span style={{ marginLeft: 6, background: "rgba(0,0,0,0.2)", padding: "1px 7px", borderRadius: 5, fontSize: 11 }}>{crmLeads.length}</span>}
+              📋 Saved leads {crmLeads.length > 0 && <span style={{ marginLeft: 6, background: "rgba(0,0,0,0.2)", padding: "1px 7px", borderRadius: 5, fontSize: 11 }}>{crmLeads.length}</span>}
             </button>
           </div>
 
