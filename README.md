@@ -3,7 +3,7 @@
 Finds South African, US and Canadian businesses on Google Maps and saves them straight into the Micah Mishael CRM.
 
 - **Live:** https://mm-leads.pages.dev (Cloudflare Pages, builds from `main`)
-- **CRM:** https://mm-crm.pages.dev (same logins)
+- **CRM:** https://mm-crm-3zp.pages.dev (same logins)
 
 ## How the Google key is kept safe
 
@@ -15,7 +15,7 @@ The Google Places key is **not** in this code. Every search goes to the Supabase
 |---|---|
 | `VITE_SUPABASE_URL` | `https://ymizrwbxwzgxkkjntstb.supabase.co` |
 | `VITE_SUPABASE_ANON_KEY` | the project's anon (public) key |
-| `VITE_CRM_URL` | `https://mm-crm.pages.dev` |
+| `VITE_CRM_URL` | `https://mm-crm-3zp.pages.dev` |
 
 ## Website inspector
 
