@@ -19,4 +19,8 @@ The Google Places key is **not** in this code. Every search goes to the Supabase
 
 ## Website inspector
 
-`site-inspector-worker.js` is the Cloudflare Worker that checks if a business website is outdated or has no online shop. It runs separately at `lead-finder.mishael-c4d.workers.dev`.
+`site-inspector-worker.js` is the Cloudflare Worker that checks if a business website is outdated or has no online shop, and finds the email addresses on it. It runs separately at `lead-finder.mishael-c4d.workers.dev` and is **not** deployed by Cloudflare Pages: after you change it, paste it into the `lead-finder` Worker in the Cloudflare dashboard and click Deploy.
+
+## Email finder
+
+Google Places does not give email addresses. After each search, the app sends every result that has a website to the Worker (`?emails=1&url=...`), 4 at a time. The Worker reads the home page and, if it finds no email there, up to 3 contact or about pages. It reads `mailto:` links, plain-text emails, `name [at] site [dot] com` text and Cloudflare-hidden emails, and skips placeholder and platform addresses. Emails on the business's own domain come first. The first email is saved to the CRM `email` column when you click **+ CRM**.

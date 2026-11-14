@@ -442,6 +442,26 @@ async function inspectSite(url) {
   return empty;
 }
 
+// ── EMAIL FINDER ──────────────────────────────────────────────────────────────
+// Google Places does not return emails, so the Worker reads the business's
+// website (home page, then contact/about pages) and returns any emails it finds.
+async function findEmails(url) {
+  if (!url || !INSPECTOR_WORKER_URL) return { reachable: false, emails: [] };
+  try {
+    const controller = new AbortController();
+    const t = setTimeout(() => controller.abort(), 20000);
+    const res = await fetch(`${INSPECTOR_WORKER_URL}?emails=1&url=${encodeURIComponent(url)}`, { signal: controller.signal });
+    clearTimeout(t);
+    if (!res.ok) return { reachable: false, emails: [] };
+    const data = await res.json();
+    // An older Worker ignores ?emails=1 and sends no "emails" field
+    if (!Array.isArray(data.emails)) return { unsupported: true, reachable: !!data.reachable, emails: [] };
+    return { reachable: !!data.reachable, emails: data.emails };
+  } catch {
+    return { reachable: false, emails: [] };
+  }
+}
+
 // ── UTILS ─────────────────────────────────────────────────────────────────────
 function initials(name = "") {
   return name.split(" ").map(w => w[0] || "").join("").slice(0, 2).toUpperCase() || "??";
@@ -595,6 +615,27 @@ function getPlacePhotoUrl(photo, maxWidth = 400) {
   return null;
 }
 
+
+// ── EMAIL CHIP ────────────────────────────────────────────────────────────────
+function EmailChip({ lookup, onCopied }) {
+  const [copied, setCopied] = useState(null);
+  const chipStyle = { fontFamily: "'Montserrat', sans-serif", fontSize: 11, padding: "4px 10px", borderRadius: 32, border: "1px solid rgba(160,120,40,0.18)", background: "rgba(160,120,40,0.06)", color: "#7A5C1A" };
+  if (!lookup || lookup.status === "unsupported") return null;
+  if (lookup.status === "checking") return <span style={{ ...chipStyle, color: "#9A9186" }}>✉ Finding email…</span>;
+  if (!lookup.emails?.length) return <span style={{ ...chipStyle, color: "#9A9186", background: "transparent" }}>✉ {lookup.reachable ? "No email on site" : "Site unreachable"}</span>;
+  return (
+    <>
+      {lookup.emails.slice(0, 3).map(email => (
+        <button key={email} title="Copy email" onClick={e => {
+          e.stopPropagation();
+          navigator.clipboard.writeText(email);
+          setCopied(email); setTimeout(() => setCopied(null), 1500);
+          onCopied?.("Email copied ✓");
+        }} style={{ ...chipStyle, cursor: "pointer" }}>✉ {copied === email ? "Copied!" : email}</button>
+      ))}
+    </>
+  );
+}
 
 function SiteInspectButton({ place, onResult, onToast }) {
   const [status, setStatus] = useState("idle"); // idle | checking | done
@@ -767,6 +808,11 @@ function PlaceCard({ place, index, onSave, isSaved, onToast, mode, onInspectResu
         <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <PhoneChip phone={phone} onCopied={onToast} />
           <WhatsAppButton phone={phone} />
+        </div>
+      )}
+      {place.websiteUri && place._emailLookup && (
+        <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
+          <EmailChip lookup={place._emailLookup} onCopied={onToast} />
         </div>
       )}
       </div>
@@ -1029,6 +1075,10 @@ function LeadFinder({ session, profile, onLogout }) {
   const [activeTab, setActiveTab] = useState("finder");
   const [searchMode, setSearchMode] = useState("no_site"); // "no_site" | "outdated_site" | "no_ecommerce"
   const [inspections, setInspections] = useState({}); // place.id -> inspection result
+  const [emailLookups, setEmailLookups] = useState({}); // place.id -> { status, reachable, emails }
+  const emailLookupsRef = useRef({});
+  const emailRunRef = useRef(0); // bumps on each new search so old lookups stop
+  const [emailOnly, setEmailOnly] = useState(false);
   const [hideClean, setHideClean] = useState(false); // hide sites that scanned clean (outdated/no_ecommerce modes)
 
   const toast = useToast();
@@ -1057,11 +1107,41 @@ useEffect(() => {
   localStorage.setItem("mm_empire_v2", JSON.stringify(crmLeads));
 }, [crmLeads]);
 
+  // Finds emails on each result's website, 4 sites at a time, in the background.
+  // A new search bumps emailRunRef so lookups from an older search stop.
+  const emailQueueRef = useRef([]);
+  const emailActiveRef = useRef(0);
+  const lookupEmails = useCallback((places) => {
+    const run = emailRunRef.current;
+    const todo = places.filter(p => p.websiteUri && !emailLookupsRef.current[p.id]);
+    if (!todo.length) return;
+    const pending = {};
+    todo.forEach(p => { pending[p.id] = { status: "checking", emails: [] }; });
+    emailLookupsRef.current = { ...emailLookupsRef.current, ...pending };
+    setEmailLookups(prev => ({ ...prev, ...pending }));
+    emailQueueRef.current.push(...todo.map(p => ({ p, run })));
+    const worker = async () => {
+      emailActiveRef.current++;
+      while (emailQueueRef.current.length) {
+        const { p, run: r } = emailQueueRef.current.shift();
+        if (r !== emailRunRef.current) continue;
+        const res = await findEmails(p.websiteUri);
+        if (r !== emailRunRef.current) continue;
+        const done = { status: res.unsupported ? "unsupported" : "done", reachable: res.reachable, emails: res.emails };
+        emailLookupsRef.current = { ...emailLookupsRef.current, [p.id]: done };
+        setEmailLookups(prev => ({ ...prev, [p.id]: done }));
+      }
+      emailActiveRef.current--;
+    };
+    while (emailActiveRef.current < 4) worker();
+  }, []);
+
   // Search with multi-city pagination — bypasses Google's 60-result cap
   const searchPlaces = useCallback(async () => {
     const term = customCategory.trim() || (category !== "__keyword__" ? category : "");
     if (!term) return;
     setLoading(true); setSearchError(null); setResults([]); setSearched(false); setInspections({});
+    setEmailLookups({}); emailLookupsRef.current = {}; emailRunRef.current++;
     setFetchProgress({ fetched: 0, found: 0, running: true });
     searchStopRef.current = false;
 
@@ -1138,6 +1218,8 @@ useEffect(() => {
         const sorted = [...allMatches].sort((a, b) => (a.displayName?.text || "").localeCompare(b.displayName?.text || ""));
         setResults(sorted);
         setFetchProgress({ fetched: totalFetched, found: allMatches.length, running: true });
+        // Start finding emails for this area's results while the next area loads
+        lookupEmails(tagged);
       }
 
       setSearched(true);
@@ -1149,7 +1231,7 @@ useEffect(() => {
       setFetchProgress(p => ({ ...p, running: false }));
       refreshQuota();
     }
-  }, [category, city, usaState, canadaProvince, country, customCategory, searchMode, toast, refreshQuota]);
+  }, [category, city, usaState, canadaProvince, country, customCategory, searchMode, toast, refreshQuota, lookupEmails]);
 
   const stopSearch = useCallback(() => {
     searchStopRef.current = true;
@@ -1173,6 +1255,16 @@ useEffect(() => {
     }
     // Attach inspection results for display
     list = list.map(p => inspections[p.id] ? { ...p, _inspection: inspections[p.id] } : p);
+    list = list.map(p => {
+      const lk = emailLookups[p.id];
+      // A site scan also returns emails, so use those if the email lookup found none
+      const scanEmails = inspections[p.id]?.emails || [];
+      if (!lk && !scanEmails.length) return p;
+      const emails = [...new Set([...(lk?.emails || []), ...scanEmails])];
+      const status = scanEmails.length ? "done" : lk.status;
+      return { ...p, _emailLookup: { ...(lk || {}), status, reachable: lk?.reachable || !!inspections[p.id]?.reachable, emails } };
+    });
+    if (emailOnly) list = list.filter(p => p._emailLookup?.emails?.length);
     // Once a site has been inspected, optionally hide ones that don't match the mode's intent
     if (searchMode === "outdated_site" && hideClean) {
       list = list.filter(p => {
@@ -1197,7 +1289,7 @@ useEffect(() => {
       return (a.displayName?.text || "").localeCompare(b.displayName?.text || "");
     });
     return list;
-  }, [results, cellOnly, inspections, searchMode, hideClean, sortBy]);
+  }, [results, cellOnly, inspections, emailLookups, emailOnly, searchMode, hideClean, sortBy]);
 
   const onInspectResult = useCallback((placeId, result) => {
     setInspections(prev => ({ ...prev, [placeId]: result }));
@@ -1234,8 +1326,10 @@ useEffect(() => {
     const hard = (dupes || []).find(d => d.matched_on !== "name");
     if (hard) { toast.show(`Already in the CRM: ${hard.owner_name}'s lead (same ${hard.matched_on.replace("_", " ")})`); return; }
     const parts = (place.formattedAddress || "").split(",").map(x => x.trim());
+    const foundEmails = place._emailLookup?.emails || emailLookupsRef.current[place.id]?.emails || [];
+    const email = foundEmails[0] || null;
     const { error } = await supabase.from("leads").insert({
-      business_name: name, phone, website: place.websiteUri || null, place_id: place.id,
+      business_name: name, phone, email, website: place.websiteUri || null, place_id: place.id,
       google_maps_url: place.googleMapsUri || `https://www.google.com/maps/place/?q=place_id:${place.id}`,
       rating: place.rating ?? null, review_count: place.userRatingCount ?? null,
       industry: customCategory.trim() || (category !== "__keyword__" ? category : "") || null,
@@ -1251,7 +1345,7 @@ useEffect(() => {
       : COUNTRIES.find(c => c.value === country)?.hasSub === "usa_states" ? usaState
       : COUNTRIES.find(c => c.value === country)?.hasSub === "canada_provinces" ? canadaProvince
       : "";
-    setCrmLeads(prev => [{ ...place, status: "New", score, notes: "", source: "google", country, savedCity, savedCategory, addedAt: new Date().toISOString() }, ...prev]);
+    setCrmLeads(prev => [{ ...place, email: email || undefined, emails: foundEmails, status: "New", score, notes: "", source: "google", country, savedCity, savedCategory, addedAt: new Date().toISOString() }, ...prev]);
     toast.show("Saved to the Micah Mishael CRM ✓");
   }, [crmLeads, country, city, usaState, canadaProvince, category, customCategory, toast, session]);
 
@@ -1657,7 +1751,7 @@ useEffect(() => {
                   <div style={{ marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
                     <div style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 700, fontSize: 15 }}>
                       <span style={{ color: "#A07828" }}>{filteredResults.length}</span>
-                      {cellOnly && results.length !== filteredResults.length && (
+                      {(cellOnly || emailOnly) && results.length !== filteredResults.length && (
                         <span style={{ fontSize: 11, color: "#5A5248", fontFamily: "'Montserrat', sans-serif" }}> of {results.length}</span>
                       )}
                       {" "}{searchMode === "all" ? "" : searchMode === "no_site" ? "website-less " : searchMode === "outdated_site" ? "websites to scan for " : "stores to scan for "}{activeSearchTerm}s in {COUNTRIES.find(c => c.value === country)?.hasSub === "usa_states" ? usaState : COUNTRIES.find(c => c.value === country)?.hasSub === "canada_provinces" ? canadaProvince : COUNTRIES.find(c => c.value === country)?.hasSub === "sa_cities" ? city : country}
@@ -1671,6 +1765,14 @@ useEffect(() => {
                         border: `1px solid ${cellOnly ? "rgba(160,120,40,0.45)" : "rgba(160,120,40,0.07)"}`,
                         color: cellOnly ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
                       }}>📱 Cell Only</button>
+                      {searchMode !== "no_site" && (
+                        <button onClick={() => setEmailOnly(v => !v)} title="Show only businesses with an email found on their website" style={{
+                          fontFamily: "'Montserrat', sans-serif", fontSize: 10, padding: "5px 12px", borderRadius: 32,
+                          background: emailOnly ? "rgba(160,120,40,0.15)" : "rgba(160,120,40,0.04)",
+                          border: `1px solid ${emailOnly ? "rgba(160,120,40,0.45)" : "rgba(160,120,40,0.07)"}`,
+                          color: emailOnly ? "#A07828" : "#5A5248", cursor: "pointer", transition: "all 0.15s",
+                        }}>✉ Has Email{(() => { const n = Object.values(emailLookups).filter(l => l.emails?.length).length; const c = Object.values(emailLookups).filter(l => l.status === "checking").length; return ` (${n}${c ? `, ${c} checking` : ""})`; })()}</button>
+                      )}
                       {(searchMode === "outdated_site" || searchMode === "no_ecommerce") && (
                         <>
                           <button onClick={() => setHideClean(v => !v)} title="Show only sites flagged as outdated / missing a store" style={{
